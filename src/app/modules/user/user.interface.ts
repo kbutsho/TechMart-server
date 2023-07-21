@@ -1,0 +1,21 @@
+import { Model, Types } from 'mongoose';
+import { IAdmin } from '../admin/admin.interface';
+import { ICustomer } from '../customer/customer.interface';
+import { ISeller } from '../seller/seller.interface';
+
+export type IUserRole = "super-admin" | "admin" | "seller" | "customer";
+export type IUserStatus = "pending" | "active" | "block" | "inactive"
+
+export type IUser = {
+  userId: Types.ObjectId | IAdmin | ICustomer | ISeller;
+  email: string;
+  role: IUserRole;
+  password: string;
+  status: IUserStatus;
+  isFirebase: boolean;
+}
+
+export type UserModel = {
+  isUserExist(email: string): Promise<Pick<IUser, 'userId' | 'email' | 'role'>>;
+  isPasswordMatched(givenPassword: string, savedPassword: string): Promise<boolean>;
+} & Model<IUser>;
