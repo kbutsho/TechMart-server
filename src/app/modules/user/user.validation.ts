@@ -9,19 +9,24 @@ const createUser = z.object({
     }),
     password: z.string({
       required_error: 'password is required!'
+    }).refine((value) => value.trim() !== '', {
+      message: 'password is required!'
     }),
     firstName: z.string({
-      required_error: 'firstName is required!',
+      required_error: 'firstName is required!'
+    }).refine((value) => value.trim() !== '', {
+      message: 'firstName is required!'
     }),
     lastName: z.string({
-      required_error: 'lastName is required!',
+      required_error: 'lastName is required!'
+    }).refine((value) => value.trim() !== '', {
+      message: 'lastName is required!'
     }),
     role: z.string({
       required_error: 'role is required!'
+    }).refine((value) => value.trim() !== '', {
+      message: 'role is required!'
     }),
-    isFirebase: z.boolean({
-      required_error: 'isFirebase is required!'
-    })
   })
 });
 

@@ -4,12 +4,10 @@ import { CustomerModel, ICustomer } from "./customer.interface";
 const customerSchema = new Schema<ICustomer>(
   {
     firstName: {
-      type: String,
-      required: true
+      type: String, required: true
     },
     lastName: {
-      type: String,
-      required: true
+      type: String
     },
     address: {
       country: {

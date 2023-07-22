@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 
 export type IAdmin = {
   firstName: string;
-  lastName: string;
+  lastName?: string;
   address?: {
     country: string;
     state: string;

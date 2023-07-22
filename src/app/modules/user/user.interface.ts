@@ -10,12 +10,12 @@ export type IUser = {
   userId: Types.ObjectId | IAdmin | ICustomer | ISeller;
   email: string;
   role: IUserRole;
-  password: string;
+  password: string | null;
   status: IUserStatus;
-  isFirebase: boolean;
+  isAuthService: boolean;
 }
 
 export type UserModel = {
-  isUserExist(email: string): Promise<Pick<IUser, 'userId' | 'email' | 'role'>>;
+  isUserExist(email: string): Promise<Pick<IUser, 'userId' | 'email' | 'role' | 'password'>>;
   isPasswordMatched(givenPassword: string, savedPassword: string): Promise<boolean>;
 } & Model<IUser>;

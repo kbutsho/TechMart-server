@@ -7,7 +7,7 @@ export type ISignup = {
   role: IUserRole;
   password: string;
   status: IUserStatus;
-  isFirebase: boolean;
+  isAuthService: boolean;
 }
 
 export type ILogin = {

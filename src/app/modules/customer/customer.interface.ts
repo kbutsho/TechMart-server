@@ -1,8 +1,9 @@
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 export type ICustomer = {
+  _id: Types.ObjectId;
   firstName: string;
-  lastName: string;
+  lastName?: string;
   address?: {
     country: string;
     state: string;

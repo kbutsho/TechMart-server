@@ -5,12 +5,10 @@ import { ISeller, SellerModel } from "./seller.interface";
 const sellerSchema = new Schema<ISeller>(
   {
     firstName: {
-      type: String,
-      required: true
+      type: String, required: true
     },
     lastName: {
-      type: String,
-      required: true
+      type: String
     },
     address: {
       country: {

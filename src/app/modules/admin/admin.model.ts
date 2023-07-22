@@ -4,12 +4,10 @@ import { AdminModel, IAdmin } from "./admin.interface";
 const adminSchema = new Schema<IAdmin>(
   {
     firstName: {
-      type: String,
-      required: true
+      type: String, required: true
     },
     lastName: {
-      type: String,
-      required: true
+      type: String
     },
     address: {
       country: {
