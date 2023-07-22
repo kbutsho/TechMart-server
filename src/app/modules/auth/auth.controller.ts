@@ -41,9 +41,7 @@ const loginWithService = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
   const result = await AuthService.loginWithService(data);
   const { refreshToken, ...accessToken } = result;
-
-  // set refresh token into cookie
-  const cookieOptions = {
+  const cookieOptions = { // set refresh token into cookie
     secure: config.env === 'production',
     httpOnly: true,
   };

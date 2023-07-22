@@ -16,6 +16,6 @@ export type IUser = {
 }
 
 export type UserModel = {
-  isUserExist(email: string): Promise<Pick<IUser, 'userId' | 'email' | 'role' | 'password'>>;
+  // isUserExist(email: string): Promise<Pick<IUser, 'userId' | 'email' | 'role' | 'password'>>;
   isPasswordMatched(givenPassword: string, savedPassword: string): Promise<boolean>;
 } & Model<IUser>;
