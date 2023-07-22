@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.post('/signup', validateRequest(UserValidation.createUser), AuthController.signup);
 router.post('/login', validateRequest(AuthValidation.loginZodSchema), AuthController.login);
-router.post('/login-service', validateRequest(AuthValidation.loginWithServiceZodSchema), AuthController.loginWithService);
+router.post('/login/google', validateRequest(AuthValidation.loginWithGoogleZodSchema), AuthController.loginWithGoogle);
+
+
 
 export const AuthRoutes = router;

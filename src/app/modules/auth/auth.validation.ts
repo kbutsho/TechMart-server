@@ -15,7 +15,7 @@ const loginZodSchema = z.object({
   })
 });
 
-const loginWithServiceZodSchema = z.object({
+const loginWithGoogleZodSchema = z.object({
   body: z.object({
     email: z.string({
       required_error: 'email is required!'
@@ -41,5 +41,5 @@ const loginWithServiceZodSchema = z.object({
 
 export const AuthValidation = {
   loginZodSchema,
-  loginWithServiceZodSchema
+  loginWithGoogleZodSchema
 };

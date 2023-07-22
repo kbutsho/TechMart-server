@@ -74,7 +74,7 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
   }
 };
 
-const loginWithService = async (data: ISignup): Promise<ILoginUserResponse> => {
+const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
   const isUserExist: IUser | null = await User.findOne({ email: data.email })
   let userObjectId: Types.ObjectId | null = null;
   if (data.isAuthService) { // firebase login user
@@ -163,5 +163,5 @@ const loginWithService = async (data: ISignup): Promise<ILoginUserResponse> => {
 
 
 export const AuthService = {
-  signup, login, loginWithService
+  signup, login, loginWithGoogle
 }

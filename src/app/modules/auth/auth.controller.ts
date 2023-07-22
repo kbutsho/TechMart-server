@@ -37,9 +37,9 @@ const login = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const loginWithService = catchAsync(async (req: Request, res: Response) => {
+const loginWithGoogle = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
-  const result = await AuthService.loginWithService(data);
+  const result = await AuthService.loginWithGoogle(data);
   const { refreshToken, ...accessToken } = result;
   const cookieOptions = { // set refresh token into cookie
     secure: config.env === 'production',
@@ -55,5 +55,5 @@ const loginWithService = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const AuthController = {
-  signup, login, loginWithService
+  signup, login, loginWithGoogle
 }
