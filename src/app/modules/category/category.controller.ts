@@ -28,4 +28,15 @@ const getAllCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
   });
 })
 
-export const CategoryController = { addCategory, getAllCategory }
+const updateCategory = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.updateCategory(req.body);
+  sendResponse<ICategory>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'category updated successfully!',
+    data: result,
+  });
+});
+
+
+export const CategoryController = { addCategory, getAllCategory, updateCategory }

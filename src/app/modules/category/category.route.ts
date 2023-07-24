@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.post('/add', validateRequest(CategoryValidation.categoryZodSchema), auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), CategoryController.addCategory);
 // router.get('/:id', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.BUYER, ENUM_USER_ROLE.SELLER), CowController.getSingleCow);
-// router.patch('/:id', validateRequest(CowValidation.updateCowZodSchema), auth(ENUM_USER_ROLE.SELLER), CowController.updateCow);
+router.patch('/update', validateRequest(CategoryValidation.categoryZodSchema), CategoryController.updateCategory);
 // router.delete('/:id', auth(ENUM_USER_ROLE.SELLER), CowController.deleteCow)
 router.get('/all', CategoryController.getAllCategory)
 
