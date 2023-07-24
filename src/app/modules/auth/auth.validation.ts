@@ -33,9 +33,11 @@ const loginWithGoogleZodSchema = z.object({
     }).refine((value) => value.trim() !== '', {
       message: 'role is required!'
     }),
-    isAuthService: z.boolean({
-      required_error: 'authService status is required!'
-    })
+    isAuthService: z
+      .literal(true)
+      .refine((value) => value === true, {
+        message: "isAuthService should be true!",
+      }),
   })
 });
 
