@@ -52,33 +52,6 @@ const loginWithGoogle = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const adminSignup: RequestHandler = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.adminSignup(req.body);
-  sendResponse<IUser>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'signup successfully!',
-    data: result
-  });
-});
-
-const adminLoginWithGoogle = catchAsync(async (req: Request, res: Response) => {
-  const { ...data } = req.body;
-  const result = await AuthService.adminLoginWithGoogle(data);
-  const { refreshToken, ...accessToken } = result;
-  const cookieOptions = {
-    secure: config.env === 'production',
-    httpOnly: true,
-  };
-  res.cookie('refreshToken', refreshToken, cookieOptions);
-  sendResponse<ILoginUserResponse>(res, {
-    statusCode: 200,
-    success: true,
-    message: 'login successfully!',
-    data: accessToken
-  });
-});
-
 export const AuthController = {
-  signup, login, loginWithGoogle, adminSignup, adminLoginWithGoogle
+  signup, login, loginWithGoogle
 }
