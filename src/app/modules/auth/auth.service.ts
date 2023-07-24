@@ -25,7 +25,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "email already exist!")
   }
   if (data.role === USER_ROLE.SELLER) {
-    const seller = await Seller.create({
+    const seller: ISeller = await Seller.create({
       image: null,
       phone: null,
       firstName: data.firstName,
@@ -33,8 +33,8 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     });
     userObjectId = seller._id;
   }
-  else {
-    const customer = await Customer.create({
+  if (data.role === USER_ROLE.CUSTOMER) {
+    const customer: ICustomer = await Customer.create({
       image: null,
       phone: null,
       firstName: data.firstName,
@@ -42,12 +42,30 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     });
     userObjectId = customer._id;
   }
+  if (data.role === USER_ROLE.ADMIN) {
+    const admin: IAdmin = await Admin.create({
+      image: null,
+      phone: null,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
+    userObjectId = admin._id;
+  }
+  else {
+    const superAdmin: ISuperAdmin = await SuperAdmin.create({
+      image: null,
+      phone: null,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    });
+    userObjectId = superAdmin._id;
+  }
   const { firstName, lastName, ...userData } = data;
   const newData: IUser = {
     ...userData,
     userId: userObjectId,
     isAuthService: false,
-    status: data.role === USER_ROLE.SELLER ? USER_STATUS.PENDING : USER_STATUS.ACTIVE
+    status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
   };
   const user = await User.create(newData);
   const result = await User.findById(user._id);
@@ -103,7 +121,7 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
         });
         userObjectId = seller._id;
       }
-      else {
+      if (data.role === USER_ROLE.CUSTOMER) {
         const customer: ICustomer = await Customer.create({
           image: null,
           phone: null,
@@ -112,12 +130,30 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
         });
         userObjectId = customer._id;
       }
+      if (data.role === USER_ROLE.ADMIN) {
+        const admin: IAdmin = await Admin.create({
+          image: null,
+          phone: null,
+          firstName: data.firstName,
+          lastName: data.lastName ? data.lastName : null,
+        });
+        userObjectId = admin._id;
+      }
+      else {
+        const superAdmin: ISuperAdmin = await SuperAdmin.create({
+          image: null,
+          phone: null,
+          firstName: data.firstName,
+          lastName: data.lastName ? data.lastName : null,
+        });
+        userObjectId = superAdmin._id;
+      }
       const { firstName, lastName, ...userData } = data;
       const newData: IUser = {
         ...userData,
         password: null,
         userId: userObjectId,
-        status: data.role === USER_ROLE.SELLER ? USER_STATUS.PENDING : USER_STATUS.ACTIVE
+        status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
       };
       const user: IUser = await User.create(newData);
       if (user.status === USER_STATUS.ACTIVE) {
@@ -168,18 +204,6 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
               { lastName: data.lastName ? data.lastName : null, firstName: data.firstName })
           }
         }
-        const { userId, email, role } = isUserExist;
-        const accessToken = jwtHelpers.createToken(
-          { userId, email, role },
-          config.jwt.secret as Secret,
-          config.jwt.expires_in as string
-        );
-        const refreshToken = jwtHelpers.createToken(
-          { userId, email, role },
-          config.jwt.refresh_secret as Secret,
-          config.jwt.refresh_expires_in as string
-        );
-        return { accessToken, refreshToken }
       } else {
         throw new ApiError(httpStatus.UNAUTHORIZED,
           `your account is ${isUserExist.status}! try again later!`);
