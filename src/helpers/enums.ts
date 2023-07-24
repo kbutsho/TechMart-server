@@ -11,3 +11,20 @@ export enum USER_STATUS {
   PENDING = 'pending',
   BLOCK = 'block'
 }
+
+export enum CATEGORY_STATUS {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  COMING_SOON = 'coming-soon',
+  UNDER_REVIEW = 'under-review',
+  DISCONTINUE = 'discontinue'
+}
+
+export enum BRAND_STATUS {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  COMING_SOON = 'coming-soon',
+  UNDER_REVIEW = 'under-review',
+  DISCONTINUE = 'discontinue'
+}
+
