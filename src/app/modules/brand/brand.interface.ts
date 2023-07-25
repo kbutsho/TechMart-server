@@ -14,4 +14,3 @@ export type IBrand = {
 
 export type BrandModel = Model<IBrand, Record<string, unknown>>;
 export type IBrandFilters = { search?: string; brandId?: string, name?: string };
-

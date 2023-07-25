@@ -6,14 +6,40 @@ import { userRole, userStatus } from './user.constant';
 import config from '../../../config';
 
 const userSchema = new Schema<IUser>({
-  userId: { type: Types.ObjectId, required: true },
-  email: { type: String, required: true, unique: true },
-  role: { type: String, enum: userRole, required: true },
-  password: { type: String, select: 0 },
-  status: { type: String, required: true, enum: userStatus },
-  isGoogleLogin: { type: Boolean, required: true }
+  userId: {
+    type: Types.ObjectId,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  role: {
+    type: String,
+    enum: userRole,
+    required: true
+  },
+  password: {
+    type: String,
+    select: 0
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: userStatus
+  },
+  isGoogleLogin: {
+    type: Boolean,
+    required: true
+  }
 },
-  { timestamps: true, toJSON: { virtuals: true } }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true
+    }
+  }
 );
 
 // checking password
