@@ -5,32 +5,32 @@ const categoryZodSchema = z.object({
     categoryId: z.string({
       required_error: 'categoryId is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'categoryId is required!',
+      message: `categoryId cannot be empty!`,
     }),
     name: z.string({
       required_error: 'name is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'name is required!',
+      message: `name cannot be empty!`,
     }),
     title: z.string({
       required_error: 'title is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'title is required!',
+      message: `title cannot be empty!`,
     }),
     description: z.string({
       required_error: 'description is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'description is required!',
+      message: `description cannot be empty!`,
     }),
     image: z.string({
       required_error: 'image is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'image is required!',
+      message: `image cannot be empty!`,
     }),
     status: z.string({
       required_error: 'status is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'status is required!',
+      message: `status cannot be empty!`,
     }),
   })
 });

@@ -64,7 +64,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
   const newData: IUser = {
     ...userData,
     userId: userObjectId,
-    isAuthService: false,
+    isGoogleLogin: false,
     status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
   };
   const user = await User.create(newData);
@@ -75,11 +75,11 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
 const login = async (data: ILogin): Promise<ILoginUserResponse> => {
   const isUserExist: IUser | null = await User.findOne({ email: data.email });
   if (!isUserExist) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'user not exist!');
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found!');
   }
   else {
-    if (isUserExist.isAuthService) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'user not exist!');
+    if (isUserExist.isGoogleLogin) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!');
     } else {
       if (isUserExist.password &&
         !(await User.isPasswordMatched(data.password, isUserExist.password))) {

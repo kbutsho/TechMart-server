@@ -7,12 +7,13 @@ export type IUserRole = "super-admin" | "admin" | "seller" | "customer";
 export type IUserStatus = "pending" | "active" | "block" | "inactive"
 
 export type IUser = {
+  _id?: Types.ObjectId;
   userId: Types.ObjectId | IAdmin | ICustomer | ISeller;
   email: string;
   role: IUserRole;
   password: string | null;
   status: IUserStatus;
-  isAuthService: boolean;
+  isGoogleLogin: boolean;
 }
 
 export type UserModel = {

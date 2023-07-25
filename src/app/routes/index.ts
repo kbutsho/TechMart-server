@@ -6,7 +6,7 @@ const router = express.Router();
 
 const moduleRoutes = [
   { path: '/auth', route: AuthRoutes },
-  { path: '/category', route: CategoryRoutes }
+  { path: '/categories', route: CategoryRoutes }
 
 ];
 

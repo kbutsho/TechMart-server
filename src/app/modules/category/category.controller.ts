@@ -7,12 +7,23 @@ import httpStatus from "http-status";
 import { categoryFilterableFields } from "./category.constant";
 import pick from "../../../shared/pick";
 
-const addCategory: RequestHandler = catchAsync(async (req: Request, res: Response) => {
-  const result = await CategoryService.addCategory(req.body);
+const createCategory: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+  const result = await CategoryService.createCategory(req.body);
   sendResponse<ICategory>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'category created successfully!',
+    data: result
+  });
+});
+
+const getSingleCategory = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CategoryService.getSingleCategory(id);
+  sendResponse<ICategory>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'category found successfully!',
     data: result
   });
 });
@@ -29,7 +40,8 @@ const getAllCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
 })
 
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await CategoryService.updateCategory(req.body);
+  const { id } = req.params;
+  const result = await CategoryService.updateCategory(id, req.body);
   sendResponse<ICategory>(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -38,5 +50,16 @@ const updateCategory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteCategory = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CategoryService.deleteCategory(id);
+  sendResponse<ICategory>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'category deleted successfully!',
+    data: result
+  });
+});
 
-export const CategoryController = { addCategory, getAllCategory, updateCategory }
+
+export const CategoryController = { createCategory, getSingleCategory, getAllCategory, updateCategory, deleteCategory }

@@ -4,12 +4,20 @@ import { ICategory, ICategoryFilters } from "./category.interface";
 import { Category } from "./category.model";
 import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
-import { isEqual, omit } from "lodash";
+import { isEqual, pick } from "lodash";
 
-const addCategory = async (data: ICategory): Promise<ICategory | null> => {
+const createCategory = async (data: ICategory): Promise<ICategory | null> => {
   const result = await Category.create(data)
   return result;
 }
+
+const getSingleCategory = async (id: string): Promise<ICategory | null> => {
+  const result = await Category.findById(id);
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'category not found!')
+  }
+  return result;
+};
 
 const getAllCategory = async (filters: ICategoryFilters): Promise<ICategory[]> => {
   const { search, ...filtersData } = filters; // search = partial match, filter = exact match
@@ -35,30 +43,29 @@ const getAllCategory = async (filters: ICategoryFilters): Promise<ICategory[]> =
   return result;
 }
 
-const updateCategory = async (data: ICategory): Promise<ICategory | null> => {
-  const category: ICategory | null = await Category.findOne({ _id: data._id });
+const updateCategory = async (id: string, data: ICategory): Promise<ICategory | null> => {
+  const category: ICategory | null = await Category.findOne({ _id: id });
   if (!category) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Category not found!');
+    throw new ApiError(httpStatus.NOT_FOUND, 'category not found!');
   } else {
-    const categoryToCompare = omit((category as any).toObject(), ["createdAt", "updatedAt", "__v", "_id"]);
-    const dataToCompare = omit(data, ["_id"]);
+    const categoryToCompare = pick((category as any).toObject(), ["categoryId", "name", "title", "description", "image"]);
+    const dataToCompare = pick(data, ["categoryId", "name", "title", "description", "image"]);
     if (isEqual(categoryToCompare, dataToCompare)) {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Category is already up to date!');
+      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'already upto date!');
     }
     else {
-      try {
-        const result: ICategory | null = await Category.findOneAndUpdate({ _id: data._id }, data, { new: true });
-        return result;
-      } catch (error: any) {
-        if (error.code === 11000) {
-          const duplicateField = Object.keys(error.keyValue)[0];
-          throw new ApiError(httpStatus.BAD_REQUEST, `${duplicateField} already exists!`);
-        }
-        throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, error);
-      }
+      const result: ICategory | null = await Category.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true });
+      return result;
     }
   }
 };
 
+const deleteCategory = async (id: string): Promise<ICategory | null> => {
+  const result = await Category.findByIdAndDelete(id);
+  if (!result) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'category not found!');
+  }
+  return result;
+};
 
-export const CategoryService = { addCategory, getAllCategory, updateCategory }
+export const CategoryService = { createCategory, getSingleCategory, getAllCategory, updateCategory, deleteCategory }

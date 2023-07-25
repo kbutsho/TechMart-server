@@ -10,7 +10,7 @@ const loginZodSchema = z.object({
     password: z.string({
       required_error: 'password is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'password is required!'
+      message: 'password cannot be empty!'
     }),
   })
 });
@@ -25,19 +25,19 @@ const loginWithGoogleZodSchema = z.object({
     firstName: z.string({
       required_error: 'firstName is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'firstName is required!'
+      message: 'firstName cannot be empty!'
     }),
     lastName: z.string().optional(),
     role: z.string({
       required_error: 'role is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'role is required!'
+      message: 'role cannot be empty!'
     }),
-    isAuthService: z
-      .literal(true)
-      .refine((value) => value === true, {
-        message: "isAuthService should be true!",
-      }),
+    isGoogleLogin: z.boolean({
+      required_error: 'isGoogleLogin status is required!'
+    }).refine((value) => value === true, {
+      message: 'isGoogleLogin status should be true!'
+    })
   })
 });
 

@@ -6,10 +6,10 @@ import auth from '../../middleware/auth';
 import { USER_ROLE } from '../../../helpers/enums';
 const router = express.Router();
 
-router.post('/add', validateRequest(CategoryValidation.categoryZodSchema), auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), CategoryController.addCategory);
-// router.get('/:id', auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.BUYER, ENUM_USER_ROLE.SELLER), CowController.getSingleCow);
-router.patch('/update', validateRequest(CategoryValidation.categoryZodSchema), CategoryController.updateCategory);
-// router.delete('/:id', auth(ENUM_USER_ROLE.SELLER), CowController.deleteCow)
-router.get('/all', CategoryController.getAllCategory)
+router.post('/', validateRequest(CategoryValidation.categoryZodSchema), auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN), CategoryController.createCategory);
+router.get('/:id', CategoryController.getSingleCategory);
+router.patch('/:id', validateRequest(CategoryValidation.categoryZodSchema), CategoryController.updateCategory);
+router.delete('/:id', CategoryController.deleteCategory)
+router.get('/', CategoryController.getAllCategory)
 
 export const CategoryRoutes = router;

@@ -7,7 +7,7 @@ export type ISignup = {
   role: IUserRole;
   password: string;
   status: IUserStatus;
-  isAuthService: boolean;
+  isGoogleLogin: boolean;
 }
 
 export type ILogin = {
