@@ -11,7 +11,7 @@ export type ICategory = {
   image: string;
   status: ICategoryStatus;
 }
-export interface ICategoryData extends Omit<ICategory, '_id' | '__v' | 'createdAt' | 'updatedAt'> { }
+
 export type CategoryModel = Model<ICategory, Record<string, unknown>>;
 export type ICategoryFilters = { search?: string; categoryId?: string, name?: string };
 
