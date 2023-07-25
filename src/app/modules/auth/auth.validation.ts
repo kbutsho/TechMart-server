@@ -36,7 +36,7 @@ const loginWithGoogleZodSchema = z.object({
     isGoogleLogin: z.boolean({
       required_error: 'isGoogleLogin status is required!'
     }).refine((value) => value === true, {
-      message: 'isGoogleLogin status should be true!'
+      message: 'isGoogleLogin status must be true!'
     })
   })
 });

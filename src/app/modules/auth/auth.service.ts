@@ -22,7 +22,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
   const isUserExist: IUser | null = await User.findOne({ email: data.email });
   let userObjectId: Types.ObjectId | null = null;
   if (isUserExist) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "email already exist!")
+    throw new ApiError(httpStatus.CONFLICT, "email already exist!")
   }
   if (data.role === USER_ROLE.SELLER) {
     const seller: ISeller = await Seller.create({
@@ -100,7 +100,7 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
         )
         return { accessToken, refreshToken }
       } else {
-        throw new ApiError(httpStatus.UNAUTHORIZED,
+        throw new ApiError(httpStatus.FORBIDDEN,
           `your account is ${isUserExist.status}! try again later!`)
       }
     }
@@ -169,7 +169,7 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
       );
       return { accessToken, refreshToken }
     } else {
-      throw new ApiError(httpStatus.UNAUTHORIZED,
+      throw new ApiError(httpStatus.FORBIDDEN,
         `your account is ${user.status}! try again later!`);
     }
   }
@@ -222,7 +222,7 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
           `your account is ${isUserExist.status}! try again later!`);
       }
     } else {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR,
+      throw new ApiError(httpStatus.UNAUTHORIZED,
         `you are not authorized to login as ${data.role}!`)
     }
   }

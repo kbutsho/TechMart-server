@@ -51,7 +51,7 @@ const updateCategory = async (id: string, data: ICategory): Promise<ICategory | 
     const categoryToCompare = pick((category as any).toObject(), ["categoryId", "name", "title", "description", "image"]);
     const dataToCompare = pick(data, ["categoryId", "name", "title", "description", "image"]);
     if (isEqual(categoryToCompare, dataToCompare)) {
-      throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'already upto date!');
+      throw new ApiError(httpStatus.BAD_REQUEST, 'already upto date!');
     }
     else {
       const result: ICategory | null = await Category.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true });
@@ -63,7 +63,7 @@ const updateCategory = async (id: string, data: ICategory): Promise<ICategory | 
 const deleteCategory = async (id: string): Promise<ICategory | null> => {
   const result = await Category.findByIdAndDelete(id);
   if (!result) {
-    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'category not found!');
+    throw new ApiError(httpStatus.NOT_FOUND, 'category not found!');
   }
   return result;
 };
