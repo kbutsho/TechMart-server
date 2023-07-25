@@ -13,6 +13,6 @@ const categorySchema = new Schema<ICategory>({
 },
   { timestamps: true, toJSON: { virtuals: true } }
 );
-categorySchema.plugin(uniqueValidator, { message: "{PATH} already exist" });
+categorySchema.plugin(uniqueValidator, { message: "{PATH} already exist!" });
 
 export const Category = model<ICategory, CategoryModel>('Category', categorySchema);
