@@ -1,13 +1,13 @@
+import { IBrandStatus } from './brand.interface';
 import { z } from 'zod';
-import { categoryStatus } from './category.constant';
-import { ICategoryStatus } from './category.interface';
+import { brandStatus } from './brand.constant';
 
-const categoryZodSchema = z.object({
+const brandZodSchema = z.object({
   body: z.object({
-    categoryId: z.string({
-      required_error: 'categoryId is required!'
+    brandId: z.string({
+      required_error: 'brandId is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `categoryId cannot be empty!`,
+      message: `brandId cannot be empty!`,
     }),
     name: z.string({
       required_error: 'name is required!'
@@ -31,12 +31,12 @@ const categoryZodSchema = z.object({
     }),
     status: z.string({
       required_error: 'status is required!'
-    }).refine((value) => categoryStatus.includes(value as ICategoryStatus), {
-      message: `status should be ${categoryStatus.join(', ').replace(/,([^,]*)$/, ' or$1')}`,
+    }).refine((value) => brandStatus.includes(value as IBrandStatus), {
+      message: `status should be ${brandStatus.join(', ').replace(/,([^,]*)$/, ' or$1')}`,
     })
   })
 });
 
-export const CategoryValidation = {
-  categoryZodSchema
+export const BrandValidation = {
+  brandZodSchema
 };

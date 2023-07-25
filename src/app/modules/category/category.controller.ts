@@ -34,7 +34,7 @@ const getAllCategory: RequestHandler = catchAsync(async (req: Request, res: Resp
   sendResponse<ICategory[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: `${result.length} category found!`,
+    message: `${result.length} categories found!`,
     data: result
   });
 })
@@ -60,6 +60,5 @@ const deleteCategory = catchAsync(async (req: Request, res: Response) => {
     data: result
   });
 });
-
 
 export const CategoryController = { createCategory, getSingleCategory, getAllCategory, updateCategory, deleteCategory }

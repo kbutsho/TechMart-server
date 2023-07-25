@@ -48,8 +48,8 @@ const updateCategory = async (id: string, data: ICategory): Promise<ICategory | 
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'category not found!');
   } else {
-    const categoryToCompare = pick((category as any).toObject(), ["categoryId", "name", "title", "description", "image"]);
-    const dataToCompare = pick(data, ["categoryId", "name", "title", "description", "image"]);
+    const categoryToCompare = pick((category as any).toObject(), ["categoryId", "name", "title", "description", "image", "status"]);
+    const dataToCompare = pick(data, ["categoryId", "name", "title", "description", "image", "status"]);
     if (isEqual(categoryToCompare, dataToCompare)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'already upto date!');
     }
