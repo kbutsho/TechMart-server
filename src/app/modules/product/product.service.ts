@@ -10,9 +10,9 @@ const createProduct = async (data: IProduct): Promise<IProduct | null> => {
   const { discountPrice, size, color, variant, ...others } = data;
   const result = await Product.create({
     ...others,
-    size: size ?? "undefine",
-    color: color ?? "undefine",
-    variant: variant ?? "undefine",
+    size: size ?? "unspecific",
+    color: color ?? "unspecific",
+    variant: variant ?? "unspecific",
     discountPrice: discountPrice ?? data.price
   })
   return result;
