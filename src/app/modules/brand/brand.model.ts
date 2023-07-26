@@ -22,7 +22,7 @@ const brandSchema = new Schema<IBrand>({
     type: String,
     required: true
   },
-  image: {
+  coverPhoto: {
     type: String,
     required: true
   },

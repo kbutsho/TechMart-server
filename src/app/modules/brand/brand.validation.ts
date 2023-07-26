@@ -24,10 +24,10 @@ const brandZodSchema = z.object({
     }).refine((value) => value.trim() !== '', {
       message: `description cannot be empty!`,
     }),
-    image: z.string({
-      required_error: 'image is required!'
+    coverPhoto: z.string({
+      required_error: 'cover photo is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `image cannot be empty!`,
+      message: `cover photo cannot be empty!`,
     }),
     status: z.string({
       required_error: 'status is required!'

@@ -8,7 +8,7 @@ export type IBrand = {
   name: string;
   title: string;
   description: string;
-  image: string;
+  coverPhoto: string;
   status: IBrandStatus;
 }
 

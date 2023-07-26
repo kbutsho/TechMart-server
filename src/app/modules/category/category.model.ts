@@ -22,7 +22,7 @@ const categorySchema = new Schema<ICategory>({
     type: String,
     required: true
   },
-  image: {
+  coverPhoto: {
     type: String,
     required: true
   },

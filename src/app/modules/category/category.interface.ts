@@ -8,7 +8,7 @@ export type ICategory = {
   name: string;
   title: string;
   description: string;
-  image: string;
+  coverPhoto: string;
   status: ICategoryStatus;
 }
 

@@ -21,11 +21,11 @@ const productSchema = new Schema<IProduct>({
     type: String,
     required: true
   },
-  coverImage: {
+  coverPhoto: {
     type: String,
     required: true
   },
-  featuredImages: {
+  featuredPhotos: {
     type: [String],
     required: true
   },
@@ -51,14 +51,14 @@ const productSchema = new Schema<IProduct>({
     type: Number,
     required: true
   },
-  price: {
-    type: Number,
-    required: true
-  },
   priceUnit: {
     type: String,
     required: true,
     enum: priceUnit
+  },
+  price: {
+    type: Number,
+    required: true
   },
   discountPrice: {
     type: Number
@@ -70,13 +70,13 @@ const productSchema = new Schema<IProduct>({
     type: [String]
   },
   color: {
-    type: Number
+    type: String
   },
   variant: {
-    type: Number
+    type: String
   },
   size: {
-    type: Number
+    type: String
   },
   status: {
     type: String,

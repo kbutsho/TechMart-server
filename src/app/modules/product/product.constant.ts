@@ -5,17 +5,15 @@ export const priceUnit: IPriceUnit[] = ["taka", "usd", "euro", "rupi"];
 export const productFilterableFields = [
   'search',
   'name',
-  'title',
-  'description',
   'brand',
   'category',
-  'price',
-  'discountPrice',
+  'status',
   'color',
   'variant',
   'size',
-  'status',
-  'warranty'
+  'price',
+  'maxPrice',
+  'minPrice'
 ];
 export const productSearchableFields = [
   'name',
@@ -23,11 +21,9 @@ export const productSearchableFields = [
   'description',
   'brand',
   'category',
-  'price',
-  'discountPrice',
-  'color',
-  'variant',
-  'size',
   'status',
-  'warranty'
+  'warranty',
+  'color',
+  'size',
+  'variant'
 ];

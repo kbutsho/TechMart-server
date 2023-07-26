@@ -1,5 +1,19 @@
 import { SortOrder } from 'mongoose';
 
+// const {
+//   $gt,
+//   $lt,
+//   $gte,
+//   $lte,
+//   $eq,
+//   $ne,
+//   $in,
+//   $nin,
+//   $and,
+//   $or,
+//   $not,
+// } = mongoose;
+
 type IOptions = {
   page?: number;
   limit?: number;
