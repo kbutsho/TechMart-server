@@ -5,6 +5,7 @@ import { Category } from "./category.model";
 import ApiError from "../../../errors/ApiError";
 import httpStatus from "http-status";
 import { isEqual, pick } from "lodash";
+import { Product } from "../product/product.model";
 
 const createCategory = async (data: ICategory): Promise<ICategory | null> => {
   const result = await Category.create(data)
@@ -61,11 +62,17 @@ const updateCategory = async (id: string, data: ICategory): Promise<ICategory | 
 };
 
 const deleteCategory = async (id: string): Promise<ICategory | null> => {
-  const result = await Category.findByIdAndDelete(id);
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'category not found!');
+  const product = await Product.find({ categoryId: id });
+  if (product.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST,
+      `category has ${product.length} products. delete them first!`);
+  } else {
+    const result = await Category.findByIdAndDelete(id);
+    if (!result) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'category not found!');
+    }
+    return result;
   }
-  return result;
 };
 
 export const CategoryService = { createCategory, getSingleCategory, getAllCategory, updateCategory, deleteCategory }
