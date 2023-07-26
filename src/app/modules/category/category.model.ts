@@ -4,7 +4,7 @@ import { categoryStatus } from "./category.constant";
 import uniqueValidator from "mongoose-unique-validator";
 
 const categorySchema = new Schema<ICategory>({
-  categoryId: {
+  code: {
     type: String,
     required: true,
     unique: true

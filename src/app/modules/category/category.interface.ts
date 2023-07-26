@@ -4,7 +4,7 @@ export type ICategoryStatus = "active" | "inactive" | "coming-soon" | "under-rev
 
 export type ICategory = {
   _id?: Types.ObjectId;
-  categoryId: string;
+  code: string;
   name: string;
   title: string;
   description: string;
@@ -13,5 +13,5 @@ export type ICategory = {
 }
 
 export type CategoryModel = Model<ICategory, Record<string, unknown>>;
-export type ICategoryFilters = { search?: string; categoryId?: string, name?: string };
+export type ICategoryFilters = { search?: string; name?: string };
 

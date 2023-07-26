@@ -5,7 +5,7 @@ export type IPriceUnit = "taka" | "usd" | "euro" | "rupi"
 
 export type IProduct = {
   _id?: Types.ObjectId;
-  productId: string;
+  code: string;
   name: string;
   title: string;
   description: string;

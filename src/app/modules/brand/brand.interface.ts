@@ -4,7 +4,7 @@ export type IBrandStatus = "active" | "inactive" | "coming-soon" | "under-review
 
 export type IBrand = {
   _id?: Types.ObjectId;
-  brandId: string;
+  code: string;
   name: string;
   title: string;
   description: string;
@@ -13,4 +13,4 @@ export type IBrand = {
 }
 
 export type BrandModel = Model<IBrand, Record<string, unknown>>;
-export type IBrandFilters = { search?: string; brandId?: string, name?: string };
+export type IBrandFilters = { search?: string; name?: string };

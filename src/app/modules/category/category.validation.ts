@@ -4,10 +4,10 @@ import { ICategoryStatus } from './category.interface';
 
 const categoryZodSchema = z.object({
   body: z.object({
-    categoryId: z.string({
-      required_error: 'categoryId is required!'
+    code: z.string({
+      required_error: 'code is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `categoryId cannot be empty!`,
+      message: `code cannot be empty!`,
     }),
     name: z.string({
       required_error: 'name is required!'

@@ -4,10 +4,10 @@ import { brandStatus } from './brand.constant';
 
 const brandZodSchema = z.object({
   body: z.object({
-    brandId: z.string({
-      required_error: 'brandId is required!'
+    code: z.string({
+      required_error: 'code is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `brandId cannot be empty!`,
+      message: `code cannot be empty!`,
     }),
     name: z.string({
       required_error: 'name is required!'

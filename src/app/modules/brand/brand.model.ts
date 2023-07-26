@@ -4,7 +4,7 @@ import { BrandModel, IBrand } from "./brand.interface";
 import { brandStatus } from "./brand.constant";
 
 const brandSchema = new Schema<IBrand>({
-  brandId: {
+  code: {
     type: String,
     required: true,
     unique: true

@@ -6,7 +6,7 @@ import httpStatus from 'http-status';
 
 const productZodSchema = z.object({
   body: z.object({
-    productId: z.string({
+    code: z.string({
       required_error: 'productId is required!'
     }).refine((value) => value.trim() !== '', {
       message: `productId cannot be empty!`,

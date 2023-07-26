@@ -4,7 +4,7 @@ import { IProduct, ProductModel } from "./product.interface";
 import { priceUnit, productStatus } from "./product.constant";
 
 const productSchema = new Schema<IProduct>({
-  productId: {
+  code: {
     type: String,
     required: true,
     unique: true
