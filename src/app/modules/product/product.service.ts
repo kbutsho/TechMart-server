@@ -25,23 +25,20 @@ const getAllProduct = async (filters: IProductFilters, paginationOptions: IPagin
   if (search) {
     andConditions.push({
       $or: productSearchableFields.map((field) => ({
-        [field]: {
-          $regex: search,
-          $options: 'i',
-        },
-      })),
-    });
+        [field]: { $regex: search, $options: 'i' },
+      }))
+    })
   }
   if (Object.keys(filtersData).length) {
     andConditions.push({
       $and: Object.entries(filtersData).map(([field, value]) => ({
-        [field]: value,
-      })),
-    });
+        [field]: value
+      }))
+    })
   }
   const sortConditions: { [key: string]: SortOrder } = {};
   if (sortBy && sortOrder) {
-    sortConditions[sortBy] = sortOrder;
+    sortConditions[sortBy] = sortOrder
   }
   if (minPrice) {
     andConditions.push(
@@ -61,7 +58,7 @@ const getAllProduct = async (filters: IProductFilters, paginationOptions: IPagin
   const total = await Product.countDocuments();
   return {
     meta: { page, limit, total },
-    data: result,
+    data: result
   };
 };
 
