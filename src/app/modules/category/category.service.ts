@@ -49,13 +49,14 @@ const updateCategory = async (id: string, data: ICategory): Promise<ICategory | 
   if (!category) {
     throw new ApiError(httpStatus.NOT_FOUND, 'category not found!');
   } else {
-    const categoryToCompare = pick((category as any).toObject(), ["categoryId", "name", "title", "description", "image", "status"]);
-    const dataToCompare = pick(data, ["categoryId", "name", "title", "description", "image", "status"]);
+    const categoryToCompare = pick((category as any).toObject(), ["code", "name", "title", "description", "coverPhoto", "status"]);
+    const dataToCompare = pick(data, ["code", "name", "title", "description", "coverPhoto", "status"]);
     if (isEqual(categoryToCompare, dataToCompare)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'already upto date!');
     }
     else {
       const result: ICategory | null = await Category.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true });
+      await Product.updateMany({ categoryId: id }, { category: data.name });
       return result;
     }
   }

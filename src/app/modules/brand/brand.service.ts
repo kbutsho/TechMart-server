@@ -48,13 +48,14 @@ const updateBrand = async (id: string, data: IBrand): Promise<IBrand | null> => 
   if (!brand) {
     throw new ApiError(httpStatus.NOT_FOUND, 'brand not found!');
   } else {
-    const brandToCompare = pick((brand as any).toObject(), ["brandId", "name", "title", "description", "image", "status"]);
-    const dataToCompare = pick(data, ["brandId", "name", "title", "description", "image", "status"]);
+    const brandToCompare = pick((brand as any).toObject(), ["code", "name", "title", "description", "coverPhoto", "status"]);
+    const dataToCompare = pick(data, ["code", "name", "title", "description", "coverPhoto", "status"]);
     if (isEqual(brandToCompare, dataToCompare)) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'already upto date!');
     }
     else {
       const result: IBrand | null = await Brand.findOneAndUpdate({ _id: id }, data, { new: true, runValidators: true });
+      await Product.updateMany({ brandId: id }, { brand: data.name });
       return result;
     }
   }
