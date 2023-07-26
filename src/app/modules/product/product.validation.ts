@@ -1,8 +1,9 @@
 import { z } from 'zod';
-import { priceUnit, productStatus } from './product.constant';
+import { discountStatus, priceUnit, productStatus } from './product.constant';
 import { IPriceUnit, IProductStatus } from './product.interface';
 import ApiError from '../../../errors/ApiError';
 import httpStatus from 'http-status';
+import { COUPON_STATUS, COUPON_TYPE, DISCOUNT_STATUS, DISCOUNT_TYPE } from '../../../helpers/enums';
 
 const productZodSchema = z.object({
   body: z.object({
@@ -90,8 +91,30 @@ const productZodSchema = z.object({
       message: `seller id cannot be empty!`,
     }),
     discountPrice: z.number().optional(),
-    discountCodes: z.string().optional(),
-    couponCodes: z.string().optional(),
+    discountCodes: z.array(
+      z.object({
+        code: z.string({
+          required_error: 'discount code is required!'
+        }),
+        status: z.enum([DISCOUNT_STATUS.ACTIVE, DISCOUNT_STATUS.END, DISCOUNT_STATUS.INACTIVE]),
+        type: z.enum([DISCOUNT_TYPE.FIXED, DISCOUNT_TYPE.PERCENTAGE, DISCOUNT_TYPE.FREE_SHIPPING]),
+        amount: z.number({
+          required_error: 'discount amount is required!'
+        }),
+      })
+    ).optional(),
+    couponCodes: z.array(
+      z.object({
+        code: z.string({
+          required_error: 'discount code is required!'
+        }),
+        status: z.enum([COUPON_STATUS.ACTIVE, DISCOUNT_STATUS.END, DISCOUNT_STATUS.INACTIVE]),
+        type: z.enum([COUPON_TYPE.FIXED, DISCOUNT_TYPE.PERCENTAGE, DISCOUNT_TYPE.FREE_SHIPPING]),
+        amount: z.number({
+          required_error: 'discount amount is required!'
+        }),
+      })
+    ).optional(),
     size: z.string().optional(),
     color: z.string().optional(),
     variant: z.string().optional()

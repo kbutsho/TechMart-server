@@ -1,10 +1,14 @@
-import { SortOrder } from "mongoose";
+import mongoose, { SortOrder } from "mongoose";
 import { paginationHelpers } from "../../../helpers/paginationHelper";
 import { IGenericResponse } from "../../../interfaces/common";
 import { IPaginationOptions } from "../../../interfaces/pagination";
 import { productSearchableFields } from "./product.constant";
 import { IProduct, IProductFilters } from "./product.interface";
 import { Product } from "./product.model";
+import ApiError from "../../../errors/ApiError";
+import httpStatus from "http-status";
+import { isEqual, pick } from "lodash";
+import { USER_ROLE } from "../../../helpers/enums";
 
 const createProduct = async (data: IProduct): Promise<IProduct | null> => {
   const { discountPrice, size, color, variant, ...others } = data;
@@ -62,4 +66,92 @@ const getAllProduct = async (filters: IProductFilters, paginationOptions: IPagin
   };
 };
 
-export const productService = { createProduct, getAllProduct }
+const getSingleProduct = async (id: string): Promise<IProduct | null> => {
+  const result = await Product.findById(id);
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'product not found!')
+  }
+  return result;
+};
+
+const updateProduct = async (productId: string, userId: string, userRole: string, data: IProduct): Promise<IProduct | null> => {
+  const product: IProduct | null = await Product.findOne({ _id: productId });
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'product not found!');
+  } else {
+    const compareValues: string[] = [
+      "code", "name", "title", "description", "coverPhoto",
+      "featuredPhotos", "brandId", "categoryId", "brand",
+      "category", "quantity", "priceUnit", "price", "discountPrice",
+      "color", "variant", "size", "status", "warranty", "seller"
+    ];
+    const { seller, brandId, categoryId, color, size, variant, discountPrice, ...others } = data;
+    const updatedData = {
+      ...others,
+      discountPrice: discountPrice ?? data.price,
+      color: color ?? product.color,
+      size: size ?? product.size,
+      variant: variant ?? product.variant,
+      seller: product.seller,
+      brandId: new mongoose.Types.ObjectId(brandId),
+      categoryId: new mongoose.Types.ObjectId(categoryId)
+    }
+    const dataToCompare = pick(updatedData, compareValues);
+    const productToCompare = pick((product as any).toObject(), compareValues);
+    if (isEqual(productToCompare, dataToCompare)) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'already upto date!');
+    }
+    else {
+      if (userRole === USER_ROLE.ADMIN || userRole === USER_ROLE.SUPER_ADMIN) {
+        const result: IProduct | null = await Product.findOneAndUpdate(
+          { _id: productId }, updatedData, { new: true, runValidators: true }
+        )
+        return result;
+      } if (userRole === USER_ROLE.SELLER) {
+        console.log(userId, product.seller.toString())
+        if (userId === product.seller.toString()) {
+          const result: IProduct | null = await Product.findOneAndUpdate(
+            { _id: productId }, updatedData, { new: true, runValidators: true }
+          )
+          return result;
+        } else {
+          throw new ApiError(httpStatus.BAD_REQUEST, `you are not authorized seller of this product!`)
+        }
+      }
+      else {
+        throw new ApiError(httpStatus.BAD_REQUEST, `${userRole} is not authorized user!`)
+      }
+    }
+  }
+};
+
+const deleteProduct = async (productId: string, userId: string, userRole: string): Promise<IProduct | null> => {
+  // check order
+  // check discounts
+  // check coupons
+  const product: IProduct | null = await Product.findById(productId);
+  if (product) {
+    if (userRole === USER_ROLE.SELLER) {
+      if (userId === product.seller.toString()) {
+        const result = await Product.findByIdAndDelete(productId);
+        return result;
+      } else {
+        throw new ApiError(httpStatus.NOT_FOUND, 'you are not authorized of this product!')
+      }
+    }
+    if (userRole === USER_ROLE.ADMIN || userRole === USER_ROLE.SUPER_ADMIN) {
+      const result = await Product.findByIdAndDelete(productId);
+      return result;
+    } else {
+      throw new ApiError(httpStatus.NOT_FOUND, 'unauthorized user!')
+    }
+  } else {
+    throw new ApiError(httpStatus.NOT_FOUND, 'product not found!')
+  }
+
+
+};
+
+export const ProductService = { createProduct, getAllProduct, getSingleProduct, updateProduct, deleteProduct }
+
+

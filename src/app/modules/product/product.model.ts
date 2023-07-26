@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import { IProduct, ProductModel } from "./product.interface";
-import { priceUnit, productStatus } from "./product.constant";
+import { couponStatus, couponType, discountStatus, discountType, priceUnit, productStatus } from "./product.constant";
 
 const productSchema = new Schema<IProduct>({
   code: {
@@ -64,10 +64,48 @@ const productSchema = new Schema<IProduct>({
     type: Number
   },
   discountCodes: {
-    type: [String]
+    type: [{
+      code: {
+        type: String,
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: discountStatus,
+        required: true,
+      },
+      type: {
+        type: String,
+        enum: discountType,
+        required: true,
+      },
+      amount: {
+        type: Number,
+        required: true,
+      },
+    }]
   },
   couponCodes: {
-    type: [String]
+    type: [{
+      code: {
+        type: String,
+        required: true,
+      },
+      status: {
+        type: String,
+        enum: couponStatus,
+        required: true,
+      },
+      type: {
+        type: String,
+        enum: couponType,
+        required: true,
+      },
+      amount: {
+        type: Number,
+        required: true,
+      },
+    }]
   },
   color: {
     type: String

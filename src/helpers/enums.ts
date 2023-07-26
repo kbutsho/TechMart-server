@@ -36,3 +36,26 @@ export enum PRODUCT_STATUS {
   DISCONTINUE = 'discontinue'
 }
 
+export enum DISCOUNT_TYPE {
+  FIXED = 'fixed',
+  PERCENTAGE = 'percentage',
+  FREE_SHIPPING = 'free-shipping'
+}
+
+export enum COUPON_STATUS {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  END = 'end'
+}
+export enum COUPON_TYPE {
+  FIXED = 'fixed',
+  PERCENTAGE = 'percentage',
+  FREE_SHIPPING = 'free-shipping'
+}
+
+export enum DISCOUNT_STATUS {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+  END = 'end'
+}
+

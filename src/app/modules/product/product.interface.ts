@@ -2,7 +2,22 @@ import { Model, Types } from "mongoose";
 
 export type IProductStatus = "in-stock" | "stock-out" | "limited-stock" | "upcoming" | "discontinue";
 export type IPriceUnit = "taka" | "usd" | "euro" | "rupi"
-
+export type IDiscountStatus = "active" | "inactive" | "end";
+export type ICouponStatus = "active" | "inactive" | "end";
+export type IDiscountType = "percentage" | "fixed" | "free-shipping"
+export type ICouponType = "percentage" | "fixed" | "free-shipping"
+interface IDiscount {
+  code: string;
+  status: IDiscountStatus;
+  type: IDiscountType;
+  amount: number;
+}
+interface ICoupon {
+  code: string;
+  status: ICouponStatus;
+  type: ICouponType;
+  amount: number;
+}
 export type IProduct = {
   _id?: Types.ObjectId;
   code: string;
@@ -19,8 +34,8 @@ export type IProduct = {
   priceUnit: IPriceUnit;
   price: number;
   discountPrice?: number;
-  discountCodes?: string[];
-  couponCodes?: string[];
+  discountCodes?: IDiscount[];
+  couponCodes?: ICoupon[];
   color?: string;
   variant?: string;
   size?: string;
