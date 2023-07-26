@@ -31,6 +31,20 @@ const getAllProduct: RequestHandler = catchAsync(async (req: Request, res: Respo
   });
 })
 
+const getSellerAllProduct: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+  const filters = pick(req.query, productFilterableFields);
+  const paginationOptions = pick(req.query, paginationFields);
+  const { userId: sellerId } = req.user!
+  const result = await ProductService.getSellerAllProduct(sellerId, filters, paginationOptions);
+  sendResponse<IProduct[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `found ${result.data.length} products!`,
+    meta: result.meta,
+    data: result.data
+  });
+})
+
 const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
   const { id } = req.params;
   const result = await ProductService.getSingleProduct(id);
@@ -68,4 +82,4 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const ProductController = { createProduct, getAllProduct, getSingleProduct, updateProduct, deleteProduct }
+export const ProductController = { createProduct, getAllProduct, getSingleProduct, getSellerAllProduct, updateProduct, deleteProduct }

@@ -74,6 +74,49 @@ const getSingleProduct = async (id: string): Promise<IProduct | null> => {
   return result;
 };
 
+const getSellerAllProduct = async (sellerId: string, filters: IProductFilters, paginationOptions: IPaginationOptions): Promise<IGenericResponse<IProduct[]>> => {
+  const { search, minPrice, maxPrice, ...filtersData } = filters;
+  const { page, limit, skip, sortBy, sortOrder } = paginationHelpers.calculatePagination(paginationOptions);
+  const andConditions = [];
+  if (search) {
+    andConditions.push({
+      $or: productSearchableFields.map((field) => ({
+        [field]: { $regex: search, $options: 'i' },
+      }))
+    })
+  }
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value
+      }))
+    })
+  }
+  const sortConditions: { [key: string]: SortOrder } = {};
+  if (sortBy && sortOrder) {
+    sortConditions[sortBy] = sortOrder
+  }
+  if (minPrice) {
+    andConditions.push(
+      { price: { $gte: minPrice } }
+    );
+  } if (maxPrice) {
+    andConditions.push(
+      { price: { $lte: maxPrice } }
+    );
+  }
+  andConditions.push({ seller: sellerId });
+  const whereConditions = andConditions.length > 0 ? { $and: andConditions } : {};
+  const result = await Product.find(whereConditions)
+    .sort(sortConditions)
+    .skip(skip)
+    .limit(limit);
+  const total = await Product.countDocuments();
+  return {
+    meta: { page, limit, total },
+    data: result
+  };
+};
 const updateProduct = async (productId: string, userId: string, userRole: string, data: IProduct): Promise<IProduct | null> => {
   const product: IProduct | null = await Product.findOne({ _id: productId });
   if (!product) {
@@ -152,6 +195,7 @@ const deleteProduct = async (productId: string, userId: string, userRole: string
 
 };
 
-export const ProductService = { createProduct, getAllProduct, getSingleProduct, updateProduct, deleteProduct }
+
+export const ProductService = { createProduct, getAllProduct, getSingleProduct, getSellerAllProduct, updateProduct, deleteProduct }
 
 
