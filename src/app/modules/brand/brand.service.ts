@@ -4,6 +4,7 @@ import { IBrand, IBrandFilters } from "./brand.interface";
 import { Brand } from "./brand.model";
 import { brandSearchableFields } from "./brand.constant";
 import { isEqual, pick } from "lodash";
+import { Product } from "../product/product.model";
 
 const createBrand = async (data: IBrand): Promise<IBrand | null> => {
   const result = await Brand.create(data)
@@ -60,11 +61,17 @@ const updateBrand = async (id: string, data: IBrand): Promise<IBrand | null> => 
 };
 
 const deleteBrand = async (id: string): Promise<IBrand | null> => {
-  const result = await Brand.findByIdAndDelete(id);
-  if (!result) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'brand not found!');
+  const product = await Product.find({ brandId: id });
+  if (product.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST,
+      `brand has ${product.length} products. delete them first!`);
+  } else {
+    const result = await Brand.findByIdAndDelete(id);
+    if (!result) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'brand not found!');
+    }
+    return result;
   }
-  return result;
 };
 
 export const BrandService = { createBrand, getSingleBrand, getAllBrand, updateBrand, deleteBrand }
