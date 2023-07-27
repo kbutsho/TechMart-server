@@ -1,7 +1,7 @@
 import { Model, Types } from 'mongoose';
 
 export type ISuperAdmin = {
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   firstName: string;
   lastName?: string;
   address?: {
