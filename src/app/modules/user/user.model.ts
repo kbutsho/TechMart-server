@@ -32,7 +32,11 @@ const userSchema = new Schema<IUser>({
   isAuthService: {
     type: Boolean,
     required: true
-  }
+  },
+  // isVerified: {
+  //   type: Boolean,
+  //   required: true
+  // },
 },
   {
     timestamps: true,

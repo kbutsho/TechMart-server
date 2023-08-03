@@ -14,6 +14,7 @@ export type IUser = {
   password: string | null;
   status: IUserStatus;
   isAuthService: boolean;
+  // isVerified: boolean
 }
 
 export type UserModel = {

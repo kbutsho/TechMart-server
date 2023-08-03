@@ -8,6 +8,7 @@ export type ISignup = {
   password: string;
   status: IUserStatus;
   isAuthService: boolean;
+  // isVerified: boolean
 }
 
 export type ILogin = {
