@@ -65,6 +65,10 @@ const productSchema = new Schema<IProduct>({
   },
   discountCodes: {
     type: [{
+      discountId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+      },
       code: {
         type: String,
         required: true,
@@ -87,6 +91,10 @@ const productSchema = new Schema<IProduct>({
   },
   couponCodes: {
     type: [{
+      couponId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+      },
       code: {
         type: String,
         required: true,

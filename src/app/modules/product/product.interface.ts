@@ -7,12 +7,14 @@ export type ICouponStatus = "active" | "inactive" | "end";
 export type IDiscountType = "percentage" | "fixed" | "free-shipping"
 export type ICouponType = "percentage" | "fixed" | "free-shipping"
 interface IDiscount {
+  discountId: Types.ObjectId;
   code: string;
   status: IDiscountStatus;
   type: IDiscountType;
   amount: number;
 }
 interface ICoupon {
+  couponId: Types.ObjectId;
   code: string;
   status: ICouponStatus;
   type: ICouponType;

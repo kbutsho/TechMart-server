@@ -96,6 +96,9 @@ const productZodSchema = z.object({
         code: z.string({
           required_error: 'discount code is required!'
         }),
+        discountId: z.string({
+          required_error: 'discount id is required'
+        }),
         status: z.enum([DISCOUNT_STATUS.ACTIVE, DISCOUNT_STATUS.END, DISCOUNT_STATUS.INACTIVE]),
         type: z.enum([DISCOUNT_TYPE.FIXED, DISCOUNT_TYPE.PERCENTAGE, DISCOUNT_TYPE.FREE_SHIPPING]),
         amount: z.number({
@@ -107,6 +110,9 @@ const productZodSchema = z.object({
       z.object({
         code: z.string({
           required_error: 'discount code is required!'
+        }),
+        couponCode: z.string({
+          required_error: 'discount id is required'
         }),
         status: z.enum([COUPON_STATUS.ACTIVE, DISCOUNT_STATUS.END, DISCOUNT_STATUS.INACTIVE]),
         type: z.enum([COUPON_TYPE.FIXED, DISCOUNT_TYPE.PERCENTAGE, DISCOUNT_TYPE.FREE_SHIPPING]),
