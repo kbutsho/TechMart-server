@@ -25,7 +25,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     throw new ApiError(httpStatus.CONFLICT, "email already exist!")
   }
   if (data.role === USER_ROLE.SELLER) {
-    const seller: ISeller = await Seller.create({
+    const seller = await Seller.create({
       image: null,
       phone: null,
       firstName: data.firstName,
@@ -34,7 +34,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     userObjectId = seller._id;
   }
   if (data.role === USER_ROLE.CUSTOMER) {
-    const customer: ICustomer = await Customer.create({
+    const customer = await Customer.create({
       image: null,
       phone: null,
       firstName: data.firstName,
@@ -43,7 +43,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     userObjectId = customer._id;
   }
   if (data.role === USER_ROLE.ADMIN) {
-    const admin: IAdmin = await Admin.create({
+    const admin = await Admin.create({
       image: null,
       phone: null,
       firstName: data.firstName,
@@ -52,7 +52,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     userObjectId = admin._id;
   }
   else {
-    const superAdmin: ISuperAdmin = await SuperAdmin.create({
+    const superAdmin = await SuperAdmin.create({
       image: null,
       phone: null,
       firstName: data.firstName,
@@ -64,7 +64,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
   const newData: IUser = {
     ...userData,
     userId: userObjectId,
-    isGoogleLogin: false,
+    isAuthService: false,
     status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
   };
   const user = await User.create(newData);
@@ -78,7 +78,7 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
     throw new ApiError(httpStatus.NOT_FOUND, 'user not found!');
   }
   else {
-    if (isUserExist.isGoogleLogin) {
+    if (isUserExist.isAuthService) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!');
     } else {
       if (isUserExist.password &&
@@ -107,12 +107,12 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
   }
 };
 
-const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
+const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
   const isUserExist: IUser | null = await User.findOne({ email: data.email })
   let userObjectId: Types.ObjectId | null = null;
   if (!isUserExist) {
     if (data.role === USER_ROLE.SELLER) {
-      const seller: ISeller = await Seller.create({
+      const seller = await Seller.create({
         image: null,
         phone: null,
         firstName: data.firstName,
@@ -121,7 +121,7 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
       userObjectId = seller._id;
     }
     if (data.role === USER_ROLE.CUSTOMER) {
-      const customer: ICustomer = await Customer.create({
+      const customer = await Customer.create({
         image: null,
         phone: null,
         firstName: data.firstName,
@@ -130,7 +130,7 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
       userObjectId = customer._id;
     }
     if (data.role === USER_ROLE.ADMIN) {
-      const admin: IAdmin = await Admin.create({
+      const admin = await Admin.create({
         image: null,
         phone: null,
         firstName: data.firstName,
@@ -139,7 +139,7 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
       userObjectId = admin._id;
     }
     else {
-      const superAdmin: ISuperAdmin = await SuperAdmin.create({
+      const superAdmin = await SuperAdmin.create({
         image: null,
         phone: null,
         firstName: data.firstName,
@@ -229,5 +229,5 @@ const loginWithGoogle = async (data: ISignup): Promise<ILoginUserResponse> => {
 }
 
 export const AuthService = {
-  signup, login, loginWithGoogle
+  signup, login, authServiceLogin
 }

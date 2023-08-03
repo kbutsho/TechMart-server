@@ -13,7 +13,7 @@ export type IUser = {
   role: IUserRole;
   password: string | null;
   status: IUserStatus;
-  isGoogleLogin: boolean;
+  isAuthService: boolean;
 }
 
 export type UserModel = {

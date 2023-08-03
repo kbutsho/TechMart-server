@@ -15,7 +15,7 @@ const loginZodSchema = z.object({
   })
 });
 
-const loginWithGoogleZodSchema = z.object({
+const authServiceLoginZodSchema = z.object({
   body: z.object({
     email: z.string({
       required_error: 'email is required!'
@@ -33,15 +33,15 @@ const loginWithGoogleZodSchema = z.object({
     }).refine((value) => value.trim() !== '', {
       message: 'role cannot be empty!'
     }),
-    isGoogleLogin: z.boolean({
-      required_error: 'isGoogleLogin status is required!'
+    isAuthService: z.boolean({
+      required_error: 'isAuthService status is required!'
     }).refine((value) => value === true, {
-      message: 'isGoogleLogin status must be true!'
+      message: 'isAuthService status must be true!'
     })
   })
 });
 
 export const AuthValidation = {
   loginZodSchema,
-  loginWithGoogleZodSchema
+  authServiceLoginZodSchema
 };

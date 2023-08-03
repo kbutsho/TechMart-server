@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser>({
     required: true,
     enum: userStatus
   },
-  isGoogleLogin: {
+  isAuthService: {
     type: Boolean,
     required: true
   }
