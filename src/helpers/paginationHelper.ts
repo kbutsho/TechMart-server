@@ -1,19 +1,5 @@
 import { SortOrder } from 'mongoose';
 
-// const {
-//   $gt,
-//   $lt,
-//   $gte,
-//   $lte,
-//   $eq,
-//   $ne,
-//   $in,
-//   $nin,
-//   $and,
-//   $or,
-//   $not,
-// } = mongoose;
-
 type IOptions = {
   page?: number;
   limit?: number;
@@ -31,7 +17,7 @@ type IOptionsResult = {
 
 const calculatePagination = (options: IOptions): IOptionsResult => {
   const page = Number(options.page || 1);
-  const limit = Number(options.limit || 10);
+  const limit = Number(options.limit || 24);
   const skip = (page - 1) * limit;
 
   const sortBy = options.sortBy || 'createdAt';
