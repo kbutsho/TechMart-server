@@ -55,7 +55,8 @@ export type IProduct = {
   warranty: string;
   reviews?: IReview;
   rating?: number;
-  seller: Types.ObjectId
+  seller: Types.ObjectId;
+  sellCount?: number
 }
 
 export type ProductModel = Model<IProduct, Record<string, unknown>>;

@@ -19,7 +19,8 @@ const createProduct = async (data: IProduct): Promise<IProduct | null> => {
     variant: variant ?? "unspecific",
     discountPrice: discountPrice ?? data.price,
     reviews: reviews ?? [],
-    rating: rating ?? 0.0
+    rating: rating ?? 0.0,
+    sellCount: 0
   })
   return result;
 }
@@ -130,7 +131,7 @@ const updateProduct = async (productId: string, userId: string, userRole: string
       "category", "quantity", "priceUnit", "price", "discountPrice",
       "color", "variant", "size", "status", "warranty", "seller"
     ];
-    const { seller, brandId, categoryId, color, size, variant, discountPrice, reviews, rating, ...others } = data;
+    const { seller, brandId, categoryId, color, size, variant, discountPrice, reviews, rating, sellCount, ...others } = data;
     const updatedData = {
       ...others,
       discountPrice: discountPrice ?? data.price,
@@ -140,6 +141,7 @@ const updateProduct = async (productId: string, userId: string, userRole: string
       reviews: reviews ?? product.reviews,
       rating: rating ?? product.rating,
       seller: product.seller,
+      sellCount: sellCount ?? product.sellCount,
       brandId: new mongoose.Types.ObjectId(brandId),
       categoryId: new mongoose.Types.ObjectId(categoryId)
     }

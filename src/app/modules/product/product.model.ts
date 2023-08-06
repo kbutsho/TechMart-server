@@ -159,7 +159,10 @@ const productSchema = new Schema<IProduct>({
     type: Schema.Types.ObjectId,
     required: true,
     ref: "Seller"
-  }
+  },
+  sellCount: {
+    type: Number
+  },
 },
   { timestamps: true, toJSON: { virtuals: true } }
 );
