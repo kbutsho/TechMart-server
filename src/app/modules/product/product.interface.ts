@@ -20,6 +20,13 @@ interface ICoupon {
   type: ICouponType;
   amount: number;
 }
+
+interface IReview {
+  customerId: Types.ObjectId;
+  comment?: string,
+  rating: number
+}
+
 export type IProduct = {
   _id?: Types.ObjectId;
   code: string;
@@ -46,6 +53,8 @@ export type IProduct = {
   size?: string;
   status: IProductStatus;
   warranty: string;
+  reviews?: IReview;
+  rating?: number;
   seller: Types.ObjectId
 }
 

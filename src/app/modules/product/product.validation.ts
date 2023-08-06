@@ -130,8 +130,18 @@ const productZodSchema = z.object({
     size: z.string().optional(),
     color: z.string().optional(),
     variant: z.string().optional(),
-
-
+    reviews: z.array(
+      z.object({
+        customerId: z.string({
+          required_error: 'customer id is required'
+        }),
+        comment: z.string().optional(),
+        rating: z.number({
+          required_error: 'rating is required!'
+        }),
+      })
+    ).optional(),
+    rating: z.number().optional(),
   })
 });
 

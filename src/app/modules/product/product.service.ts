@@ -11,13 +11,15 @@ import { isEqual, pick } from "lodash";
 import { USER_ROLE } from "../../../helpers/enums";
 
 const createProduct = async (data: IProduct): Promise<IProduct | null> => {
-  const { discountPrice, size, color, variant, ...others } = data;
+  const { discountPrice, size, color, variant, reviews, rating, ...others } = data;
   const result = await Product.create({
     ...others,
     size: size ?? "unspecific",
     color: color ?? "unspecific",
     variant: variant ?? "unspecific",
-    discountPrice: discountPrice ?? data.price
+    discountPrice: discountPrice ?? data.price,
+    reviews: reviews ?? [],
+    rating: rating ?? 0.0
   })
   return result;
 }
@@ -128,13 +130,15 @@ const updateProduct = async (productId: string, userId: string, userRole: string
       "category", "quantity", "priceUnit", "price", "discountPrice",
       "color", "variant", "size", "status", "warranty", "seller"
     ];
-    const { seller, brandId, categoryId, color, size, variant, discountPrice, ...others } = data;
+    const { seller, brandId, categoryId, color, size, variant, discountPrice, reviews, rating, ...others } = data;
     const updatedData = {
       ...others,
       discountPrice: discountPrice ?? data.price,
       color: color ?? product.color,
       size: size ?? product.size,
       variant: variant ?? product.variant,
+      reviews: reviews ?? product.reviews,
+      rating: rating ?? product.rating,
       seller: product.seller,
       brandId: new mongoose.Types.ObjectId(brandId),
       categoryId: new mongoose.Types.ObjectId(categoryId)

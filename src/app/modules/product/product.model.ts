@@ -137,6 +137,24 @@ const productSchema = new Schema<IProduct>({
     type: String,
     required: true,
   },
+  reviews: {
+    type: [{
+      customerId: {
+        type: Schema.Types.ObjectId,
+        required: true,
+      },
+      comment: {
+        type: String
+      },
+      rating: {
+        type: Number,
+        required: true,
+      }
+    }]
+  },
+  rating: {
+    type: Number
+  },
   seller: {
     type: Schema.Types.ObjectId,
     required: true,
