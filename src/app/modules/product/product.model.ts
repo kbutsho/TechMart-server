@@ -30,7 +30,7 @@ const productSchema = new Schema<IProduct>({
     required: true
   },
   features: {
-    type: String,
+    type: Schema.Types.Mixed,
     required: true
   },
   brandId: {
