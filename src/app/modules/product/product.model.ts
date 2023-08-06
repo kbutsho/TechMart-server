@@ -29,6 +29,10 @@ const productSchema = new Schema<IProduct>({
     type: [String],
     required: true
   },
+  features: {
+    type: String,
+    required: true
+  },
   brandId: {
     type: Schema.Types.ObjectId,
     ref: "Brand",

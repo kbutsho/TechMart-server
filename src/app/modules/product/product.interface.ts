@@ -28,6 +28,9 @@ export type IProduct = {
   description: string;
   coverPhoto: string;
   featuredPhotos: string[];
+  features: {
+    [key: string]: any;
+  };
   brandId: Types.ObjectId;
   brand: string;
   categoryId: Types.ObjectId;
