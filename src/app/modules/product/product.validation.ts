@@ -27,6 +27,12 @@ const productZodSchema = z.object({
     }).refine((value) => value.trim() !== '', {
       message: `description cannot be empty!`,
     }),
+    features: z.record(z.any(), {
+      required_error: 'features is required!'
+    })
+      .refine((value) => Object.keys(value).length > 0, {
+        message: 'features cannot be empty!',
+      }),
     featuredPhotos: z.array(z.any(), {
       required_error: "featured photo is required!"
     }).refine((data) => {
@@ -123,7 +129,9 @@ const productZodSchema = z.object({
     ).optional(),
     size: z.string().optional(),
     color: z.string().optional(),
-    variant: z.string().optional()
+    variant: z.string().optional(),
+
+
   })
 });
 
