@@ -201,7 +201,27 @@ const deleteProduct = async (productId: string, userId: string, userRole: string
 
 };
 
+const getPriceRange = async (): Promise<number[] | []> => {
+  const dateRange = await Product.aggregate([
+    {
+      $group: {
+        _id: null,
+        minPrice: { $min: "$price" },
+        maxPrice: { $max: "$price" }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        range: ["$minPrice", "$maxPrice"]
+      }
+    }
+  ]);
+  return dateRange[0]?.range || [];
+};
 
-export const ProductService = { createProduct, getAllProduct, getSingleProduct, getSellerAllProduct, updateProduct, deleteProduct }
+
+
+export const ProductService = { getPriceRange, createProduct, getAllProduct, getSingleProduct, getSellerAllProduct, updateProduct, deleteProduct }
 
 

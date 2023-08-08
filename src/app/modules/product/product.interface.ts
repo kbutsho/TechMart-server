@@ -76,3 +76,5 @@ export type IProductFilters = {
   status?: string;
   warranty?: string;
 };
+
+export type IPriceRange = number[] | []

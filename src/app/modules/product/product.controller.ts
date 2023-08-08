@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import catchAsync from "../../../shared/catchAsync";
-import { IProduct } from "./product.interface";
+import { IPriceRange, IProduct } from "./product.interface";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import { productFilterableFields } from "./product.constant";
@@ -82,4 +82,14 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const ProductController = { createProduct, getAllProduct, getSingleProduct, getSellerAllProduct, updateProduct, deleteProduct }
+const getPriceRange: RequestHandler = catchAsync(async (req: Request, res: Response) => {
+  const result = await ProductService.getPriceRange();
+  sendResponse<IPriceRange>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `price range found!`,
+    data: result
+  });
+})
+
+export const ProductController = { getPriceRange, createProduct, getAllProduct, getSingleProduct, getSellerAllProduct, updateProduct, deleteProduct }
