@@ -149,7 +149,10 @@ const productSchema = new Schema<IProduct>({
       rating: {
         type: Number,
         required: true,
-      }
+      },
+      photos: {
+        type: [String]
+      },
     }]
   },
   rating: {

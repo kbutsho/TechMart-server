@@ -24,7 +24,8 @@ interface ICoupon {
 interface IReview {
   customerId: Types.ObjectId;
   comment?: string,
-  rating: number
+  rating: number,
+  photos?: string[]
 }
 
 export type IProduct = {
