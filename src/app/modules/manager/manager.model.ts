@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
-import { ISuperAdmin, SuperAdminModel } from "./super.admin.interface";
+import { IManager, ManagerModel } from "./manager.interface";
 
-const superAdminSchema = new Schema<ISuperAdmin>({
+const managerSchema = new Schema<IManager>({
   firstName: {
     type: String,
     required: true
@@ -39,4 +39,4 @@ const superAdminSchema = new Schema<ISuperAdmin>({
   }
 );
 
-export const SuperAdmin = model<ISuperAdmin, SuperAdminModel>('SuperAdmin', superAdminSchema);
+export const Manager = model<IManager, ManagerModel>('Manager', managerSchema);

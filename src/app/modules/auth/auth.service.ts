@@ -14,8 +14,8 @@ import { ISeller } from "../seller/seller.interface";
 import { ICustomer } from "../customer/customer.interface";
 import { Admin } from "../admin/admin.model";
 import { IAdmin } from "../admin/admin.interface";
-import { SuperAdmin } from "../super-admin/super.admin.model";
-import { ISuperAdmin } from "../super-admin/super.admin.interface";
+import { Manager } from "../manager/manager.model";
+import { IManager } from "../manager/manager.interface";
 
 
 const signup = async (data: ISignup): Promise<IUser | null> => {
@@ -52,13 +52,13 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     userObjectId = admin._id;
   }
   else {
-    const superAdmin = await SuperAdmin.create({
+    const manager = await Manager.create({
       image: null,
       phone: null,
       firstName: data.firstName,
       lastName: data.lastName,
     });
-    userObjectId = superAdmin._id;
+    userObjectId = manager._id;
   }
   const { firstName, lastName, ...userData } = data;
   const newData: IUser = {
@@ -139,13 +139,13 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
       userObjectId = admin._id;
     }
     else {
-      const superAdmin = await SuperAdmin.create({
+      const manager = await Manager.create({
         image: null,
         phone: null,
         firstName: data.firstName,
         lastName: data.lastName ? data.lastName : null,
       });
-      userObjectId = superAdmin._id;
+      userObjectId = manager._id;
     }
     const { firstName, lastName, ...userData } = data;
     const newData: IUser = {
@@ -176,10 +176,10 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
   else {
     if (data.role === isUserExist.role) {
       if (isUserExist.status === USER_STATUS.ACTIVE) {
-        if (isUserExist.role === USER_ROLE.SUPER_ADMIN) {
-          let getUser: ISuperAdmin | null = await SuperAdmin.findOne({ _id: isUserExist.userId });
+        if (isUserExist.role === USER_ROLE.MANAGER) {
+          let getUser: IManager | null = await Manager.findOne({ _id: isUserExist.userId });
           if (data.lastName != getUser?.lastName || data.firstName !== getUser?.firstName) {
-            await SuperAdmin.findOneAndUpdate({ _id: isUserExist.userId },
+            await Manager.findOneAndUpdate({ _id: isUserExist.userId },
               { lastName: data.lastName ? data.lastName : null, firstName: data.firstName })
           }
         }

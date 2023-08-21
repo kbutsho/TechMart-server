@@ -151,7 +151,7 @@ const updateProduct = async (productId: string, userId: string, userRole: string
       throw new ApiError(httpStatus.BAD_REQUEST, 'already upto date!');
     }
     else {
-      if (userRole === USER_ROLE.ADMIN || userRole === USER_ROLE.SUPER_ADMIN) {
+      if (userRole === USER_ROLE.ADMIN || userRole === USER_ROLE.MANAGER) {
         const result: IProduct | null = await Product.findOneAndUpdate(
           { _id: productId }, updatedData, { new: true, runValidators: true }
         )
@@ -188,7 +188,7 @@ const deleteProduct = async (productId: string, userId: string, userRole: string
         throw new ApiError(httpStatus.NOT_FOUND, 'you are not authorized of this product!')
       }
     }
-    if (userRole === USER_ROLE.ADMIN || userRole === USER_ROLE.SUPER_ADMIN) {
+    if (userRole === USER_ROLE.ADMIN || userRole === USER_ROLE.MANAGER) {
       const result = await Product.findByIdAndDelete(productId);
       return result;
     } else {

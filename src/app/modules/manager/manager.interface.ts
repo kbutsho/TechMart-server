@@ -1,6 +1,6 @@
 import { Model, Types } from 'mongoose';
 
-export type ISuperAdmin = {
+export type IManager = {
   _id?: Types.ObjectId;
   firstName: string;
   lastName?: string;
@@ -15,4 +15,4 @@ export type ISuperAdmin = {
   image?: string;
 }
 
-export type SuperAdminModel = Model<ISuperAdmin, Record<string, unknown>>;
+export type ManagerModel = Model<IManager, Record<string, unknown>>;
