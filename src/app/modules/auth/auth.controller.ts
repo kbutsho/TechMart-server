@@ -21,7 +21,7 @@ const signup: RequestHandler = catchAsync(async (req: Request, res: Response) =>
 const login = catchAsync(async (req: Request, res: Response) => {
   const { ...loginData } = req.body;
   const result = await AuthService.login(loginData);
-  const { refreshToken, ...accessToken } = result;
+  const { refreshToken, ...others } = result;
   const cookieOptions = {
     secure: config.env === 'production',
     httpOnly: true,
@@ -31,14 +31,14 @@ const login = catchAsync(async (req: Request, res: Response) => {
     statusCode: 200,
     success: true,
     message: 'login successfully!',
-    data: accessToken
+    data: others
   });
 });
 
 const authServiceLogin = catchAsync(async (req: Request, res: Response) => {
   const { ...data } = req.body;
   const result = await AuthService.authServiceLogin(data);
-  const { refreshToken, ...accessToken } = result;
+  const { refreshToken, ...others } = result;
   const cookieOptions = {
     secure: config.env === 'production',
     httpOnly: true,
@@ -48,7 +48,7 @@ const authServiceLogin = catchAsync(async (req: Request, res: Response) => {
     statusCode: 200,
     success: true,
     message: 'login successfully!',
-    data: accessToken
+    data: others
   });
 });
 

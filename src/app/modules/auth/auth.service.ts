@@ -98,7 +98,7 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
           config.jwt.refresh_secret as Secret,
           config.jwt.refresh_expires_in as string
         )
-        return { accessToken, refreshToken }
+        return { accessToken, role: isUserExist.role, refreshToken, }
       } else {
         throw new ApiError(httpStatus.FORBIDDEN,
           `your account is ${isUserExist.status}! try again later!`)
@@ -167,7 +167,7 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
         config.jwt.refresh_secret as Secret,
         config.jwt.refresh_expires_in as string
       );
-      return { accessToken, refreshToken }
+      return { accessToken, role: user.role, refreshToken }
     } else {
       throw new ApiError(httpStatus.FORBIDDEN,
         `your account is ${user.status}! try again later!`);
@@ -215,7 +215,7 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
           config.jwt.refresh_secret as Secret,
           config.jwt.refresh_expires_in as string
         );
-        return { accessToken, refreshToken }
+        return { accessToken, role: isUserExist.role, refreshToken }
 
       } else {
         throw new ApiError(httpStatus.UNAUTHORIZED,

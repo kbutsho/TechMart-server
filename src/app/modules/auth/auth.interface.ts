@@ -17,6 +17,7 @@ export type ILogin = {
 };
 
 export type ILoginUserResponse = {
+  role: string;
   accessToken: string;
   refreshToken?: string
 };
