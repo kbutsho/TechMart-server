@@ -98,6 +98,10 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
     if (isUserExist.isAuthService) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!');
     } else {
+      if (isUserExist.password &&
+        !(await User.isPasswordMatched(data.password, isUserExist.password))) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'password is incorrect!');
+      }
       if (!isUserExist.isVerified) {
         const getToken = await Token.findOne({ userId: isUserExist._id, isVerified: false });
         if (getToken) {
@@ -107,10 +111,6 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
         } else {
           throw new ApiError(httpStatus.UNAUTHORIZED, "something went wrong. contact support!")
         }
-      }
-      if (isUserExist.password &&
-        !(await User.isPasswordMatched(data.password, isUserExist.password))) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'password is incorrect!');
       }
       if (isUserExist.status === USER_STATUS.ACTIVE) {
         const { userId, email, role } = isUserExist;
