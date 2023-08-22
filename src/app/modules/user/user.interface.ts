@@ -13,6 +13,7 @@ export type IUser = {
   email: string;
   role: IUserRole;
   password: string | null;
+  confirmPassword: string | null;
   status: IUserStatus;
   isAuthService: boolean;
 }

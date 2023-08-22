@@ -10,7 +10,7 @@ const loginZodSchema = z.object({
     password: z.string({
       required_error: 'password is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'password cannot be empty!'
+      message: 'password is required!'
     }),
   })
 });
@@ -25,13 +25,13 @@ const authServiceLoginZodSchema = z.object({
     firstName: z.string({
       required_error: 'firstName is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'firstName cannot be empty!'
+      message: 'firstName is required!'
     }),
     lastName: z.string().optional(),
     role: z.string({
       required_error: 'role is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'role cannot be empty!'
+      message: 'role is required!'
     }),
     isAuthService: z.boolean({
       required_error: 'isAuthService status is required!'
