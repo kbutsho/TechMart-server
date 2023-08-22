@@ -1,5 +1,4 @@
 import { Schema, model, } from 'mongoose';
-import { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
 import { IUser, UserModel } from './user.interface';
 import { userRole, userStatus } from './user.constant';
@@ -7,7 +6,7 @@ import config from '../../../config';
 
 const userSchema = new Schema<IUser>({
   userId: {
-    type: Types.ObjectId,
+    type: Schema.Types.ObjectId,
     required: true
   },
   email: {
@@ -32,10 +31,10 @@ const userSchema = new Schema<IUser>({
     type: Boolean,
     required: true
   },
-  // isVerified: {
-  //   type: Boolean,
-  //   required: true
-  // },
+  isVerified: {
+    type: Boolean,
+    required: true
+  },
 },
   {
     timestamps: true,

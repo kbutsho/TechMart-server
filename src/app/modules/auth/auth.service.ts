@@ -1,10 +1,11 @@
+import { emailSend } from './../../../helpers/sendEmail';
 import httpStatus from "http-status";
 import ApiError from "../../../errors/ApiError";
 import config from "../../../config";
 import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { Seller } from "../seller/seller.model";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { Customer } from "../customer/customer.model";
 import { ILogin, ILoginUserResponse, ISignup } from "./auth.interface";
 import { USER_ROLE, USER_STATUS } from "../../../helpers/enums";
@@ -16,7 +17,9 @@ import { Admin } from "../admin/admin.model";
 import { IAdmin } from "../admin/admin.interface";
 import { Manager } from "../manager/manager.model";
 import { IManager } from "../manager/manager.interface";
-import nodemailer from 'nodemailer';
+import { Token } from '../token/token.model';
+import crypto from 'crypto';
+// import nodemailer from 'nodemailer';
 
 const signup = async (data: ISignup): Promise<IUser | null> => {
   const isUserExist: IUser | null = await User.findOne({ email: data.email });
@@ -65,10 +68,24 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     ...userData,
     userId: userObjectId,
     isAuthService: false,
+    isVerified: false,
     status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
   };
   const user = await User.create(newData);
   const result = await User.findById(user._id).select('-password');
+
+
+  // create email verification token and send email
+  const createToken = await Token.create({
+    userId: user._id,
+    isVerified: false,
+    verification_token: crypto.randomBytes(32).toString("hex")
+  })
+  const verification_url = `${config.frontend_url}email/${user._id}/token/${createToken.verification_token}`;
+  const sendEmailResponse = await emailSend(user.email, 'email verification', verification_url)
+  if (!sendEmailResponse) {
+    throw new ApiError(httpStatus.FORBIDDEN, "something went wrong. contact support!")
+  }
   return result;
 }
 
@@ -81,6 +98,16 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
     if (isUserExist.isAuthService) {
       throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!');
     } else {
+      if (!isUserExist.isVerified) {
+        const getToken = await Token.findOne({ userId: isUserExist._id, isVerified: false });
+        if (getToken) {
+          const verification_url = `${config.frontend_url}email/${isUserExist._id}/token/${getToken.verification_token}`;
+          await emailSend(isUserExist.email, 'email verification', verification_url)
+          throw new ApiError(httpStatus.UNAUTHORIZED, "a verification email has been sent to your email!")
+        } else {
+          throw new ApiError(httpStatus.UNAUTHORIZED, "something went wrong. contact support!")
+        }
+      }
       if (isUserExist.password &&
         !(await User.isPasswordMatched(data.password, isUserExist.password))) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'password is incorrect!');
@@ -227,32 +254,22 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
   }
 }
 
-const sendEmail = async () => {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: config.email_service,
-      auth: {
-        user: config.email_user,
-        pass: config.email_pass
-      }
-    })
-    const sent = await transporter.sendMail({
-      from: config.email_user,
-      to: 'kbutsho@gmail.com',
-      subject: 'test email',
-      html: `
-      <p style="font-size: 16px; color: #333;">Click the button below to access the link:</p>
-  `
-    })
-    console.log(sent)
-    return sent;
-  } catch (error) {
-    console.log(error)
-    console.log("email not sent")
-    return error
+const verifyEmail = async (userId: string, token: string) => {
+  const verification = await Token.findOne({ userId: userId, verification_token: token });
+  if (!verification) {
+    throw new ApiError(httpStatus.FORBIDDEN, 'invalid access!')
+  }
+  if (verification.isVerified === true) {
+    throw new ApiError(409, "email already verified!")
+  } else {
+    await Token.findOneAndUpdate({ userId: userId, verification_token: token }, { isVerified: true });
+    const result = await User.findOneAndUpdate(
+      { _id: userId }, { isVerified: true }, { new: true }
+    )
+    return result
   }
 }
 
 export const AuthService = {
-  signup, login, authServiceLogin, sendEmail
+  signup, login, authServiceLogin, verifyEmail
 }

@@ -13,7 +13,7 @@ const signup: RequestHandler = catchAsync(async (req: Request, res: Response) =>
   sendResponse<IUser>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'signup successfully!',
+    message: 'a verification email has been sent to your email!',
     data: result
   });
 });
@@ -52,13 +52,15 @@ const authServiceLogin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const sendEmail = catchAsync(async (req: Request, res: Response) => {
-  const result = await AuthService.sendEmail();
-  res.send({
-    message: result
+const verifyEmail = catchAsync(async (req: Request, res: Response) => {
+  const { userId, token } = req.params;
+  await AuthService.verifyEmail(userId, token);
+  res.status(200).send({
+    success: true,
+    message: 'email verification successful!'
   })
 });
 
 export const AuthController = {
-  signup, login, authServiceLogin, sendEmail
+  signup, login, authServiceLogin, verifyEmail
 }

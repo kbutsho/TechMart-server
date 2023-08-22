@@ -157,7 +157,6 @@ const updateProduct = async (productId: string, userId: string, userRole: string
         )
         return result;
       } if (userRole === USER_ROLE.SELLER) {
-        console.log(userId, product.seller.toString())
         if (userId === product.seller.toString()) {
           const result: IProduct | null = await Product.findOneAndUpdate(
             { _id: productId }, updatedData, { new: true, runValidators: true }
