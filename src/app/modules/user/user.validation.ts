@@ -5,7 +5,7 @@ const createUser = z.object({
     email: z.string({
       required_error: 'email is required!'
     }).email({
-      message: 'invalid email format!'
+      message: 'valid email is required!'
     }),
     password: z.string({
       required_error: 'password is required!'
@@ -26,6 +26,11 @@ const createUser = z.object({
       required_error: 'lastName is required!'
     }).refine((value) => value.trim() !== '', {
       message: 'lastName is required!'
+    }),
+    phone: z.string({
+      required_error: 'phone is required!'
+    }).refine((value) => value.trim() !== '', {
+      message: 'phone is required!'
     }),
     role: z.string({
       required_error: 'role is required!'
