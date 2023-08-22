@@ -18,14 +18,14 @@ const createUser = z.object({
       message: 'confirm password is required!'
     }),
     firstName: z.string({
-      required_error: 'firstName is required!'
+      required_error: 'first name is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'firstName is required!'
+      message: 'first name is required!'
     }),
     lastName: z.string({
-      required_error: 'lastName is required!'
+      required_error: 'last name is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'lastName is required!'
+      message: 'last name is required!'
     }),
     phone: z.string({
       required_error: 'phone is required!'

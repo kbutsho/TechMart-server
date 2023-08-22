@@ -23,9 +23,9 @@ const authServiceLoginZodSchema = z.object({
       message: 'invalid email format!'
     }),
     firstName: z.string({
-      required_error: 'firstName is required!'
+      required_error: 'first name is required!'
     }).refine((value) => value.trim() !== '', {
-      message: 'firstName is required!'
+      message: 'first name is required!'
     }),
     lastName: z.string().optional(),
     role: z.string({
