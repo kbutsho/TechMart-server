@@ -103,7 +103,7 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
         if (getToken) {
           const verification_url = `${config.frontend_url}email/${isUserExist._id}/token/${getToken.verification_token}`;
           await emailSend(isUserExist.email, 'email verification', verification_url)
-          throw new ApiError(httpStatus.UNAUTHORIZED, "a verification email has been sent to your email!")
+          throw new ApiError(409, "a verification email has been sent to your email!")
         } else {
           throw new ApiError(httpStatus.UNAUTHORIZED, "something went wrong. contact support!")
         }
