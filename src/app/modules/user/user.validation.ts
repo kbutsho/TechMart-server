@@ -39,7 +39,7 @@ const createUser = z.object({
     }),
   })
 }).refine(data => data.body.password === data.body.confirmPassword, {
-  message: 'password not match!',
+  message: 'confirm password not match!',
   path: ["confirmPassword"]
 });
 
