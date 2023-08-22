@@ -52,6 +52,13 @@ const authServiceLogin = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const sendEmail = catchAsync(async (req: Request, res: Response) => {
+  const result = await AuthService.sendEmail();
+  res.send({
+    message: result
+  })
+});
+
 export const AuthController = {
-  signup, login, authServiceLogin
+  signup, login, authServiceLogin, sendEmail
 }

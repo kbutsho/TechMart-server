@@ -16,7 +16,7 @@ import { Admin } from "../admin/admin.model";
 import { IAdmin } from "../admin/admin.interface";
 import { Manager } from "../manager/manager.model";
 import { IManager } from "../manager/manager.interface";
-
+import nodemailer from 'nodemailer';
 
 const signup = async (data: ISignup): Promise<IUser | null> => {
   const isUserExist: IUser | null = await User.findOne({ email: data.email });
@@ -61,7 +61,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     userObjectId = manager._id;
   }
   const { firstName, lastName, ...userData } = data;
-  const newData: IUser = {
+  const newData = {
     ...userData,
     userId: userObjectId,
     isAuthService: false,
@@ -147,7 +147,7 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
       userObjectId = manager._id;
     }
     const { firstName, lastName, ...userData } = data;
-    const newData: IUser = {
+    const newData = {
       ...userData,
       password: null,
       userId: userObjectId,
@@ -227,6 +227,32 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
   }
 }
 
+const sendEmail = async () => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: config.email_service,
+      auth: {
+        user: config.email_user,
+        pass: config.email_pass
+      }
+    })
+    const sent = await transporter.sendMail({
+      from: config.email_user,
+      to: 'kbutsho@gmail.com',
+      subject: 'test email',
+      html: `
+      <p style="font-size: 16px; color: #333;">Click the button below to access the link:</p>
+  `
+    })
+    console.log(sent)
+    return sent;
+  } catch (error) {
+    console.log(error)
+    console.log("email not sent")
+    return error
+  }
+}
+
 export const AuthService = {
-  signup, login, authServiceLogin
+  signup, login, authServiceLogin, sendEmail
 }
