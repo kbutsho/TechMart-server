@@ -68,7 +68,7 @@ const signup = async (data: ISignup): Promise<IUser | null> => {
     status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
   };
   const user = await User.create(newData);
-  const result = await User.findById(user._id);
+  const result = await User.findById(user._id).select('-password');
   return result;
 }
 
@@ -83,8 +83,7 @@ const login = async (data: ILogin): Promise<ILoginUserResponse> => {
     } else {
       if (isUserExist.password &&
         !(await User.isPasswordMatched(data.password, isUserExist.password))) {
-        throw new ApiError(httpStatus.UNAUTHORIZED,
-          'password is incorrect!');
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'password is incorrect!');
       }
       if (isUserExist.status === USER_STATUS.ACTIVE) {
         const { userId, email, role } = isUserExist;
