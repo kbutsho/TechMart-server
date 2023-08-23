@@ -5,7 +5,7 @@ import config from "../../../config";
 import { IUser } from "../user/user.interface";
 import { User } from "../user/user.model";
 import { Seller } from "../seller/seller.model";
-import mongoose, { Types } from "mongoose";
+import { Types } from "mongoose";
 import { Customer } from "../customer/customer.model";
 import { ILogin, ILoginUserResponse, ISignup } from "./auth.interface";
 import { USER_ROLE, USER_STATUS } from "../../../helpers/enums";
@@ -19,6 +19,8 @@ import { Manager } from "../manager/manager.model";
 import { IManager } from "../manager/manager.interface";
 import { Token } from '../token/token.model';
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+import { ResetPassword } from '../reset-password/resetPassword.model';
 // import nodemailer from 'nodemailer';
 
 const signup = async (data: ISignup): Promise<IUser | null> => {
@@ -270,6 +272,62 @@ const verifyEmail = async (userId: string, token: string) => {
   }
 }
 
+const sendEmail = async (email: string) => {
+  const isUserExist = await User.findOne({ email: email });
+  if (isUserExist) {
+    const createToken = await ResetPassword.create({
+      userId: isUserExist._id,
+      isVerified: false,
+      verification_token: crypto.randomBytes(32).toString("hex")
+    })
+    const verification_url = `${config.frontend_url}reset-password/${isUserExist._id}/token/${createToken.verification_token}`;
+    const sendEmailResponse = await emailSend(isUserExist.email, 'reset password', verification_url)
+    if (!sendEmailResponse) {
+      throw new ApiError(httpStatus.FORBIDDEN, "something went wrong. contact support!")
+    }
+  }
+  else {
+    throw new ApiError(httpStatus.NOT_FOUND, 'user not found!')
+  }
+}
+
+const resetPassword = async (userId: string, token: string, password: string) => {
+  const isValid = await ResetPassword.findOne({ userId: userId, verification_token: token, isVerified: false });
+  if (isValid) {
+    const isUserExist = await User.findOne({ _id: userId });
+    if (!isUserExist) {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!')
+    } else {
+      if (isUserExist.isAuthService) {
+        const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
+        await User.findOneAndUpdate({ _id: userId },
+          {
+            isAuthService: false,
+            password: hashedPassword
+          }, { new: true })
+        await ResetPassword.findOneAndUpdate({ userId: userId, verification_token: token, isVerified: false }, { isVerified: true })
+      } else {
+
+        //console.log(isUserExist.password!)
+        const isSamePassword = await bcrypt.compare(password, isUserExist.password!);
+        if (isSamePassword) {
+          throw new ApiError(httpStatus.UNAUTHORIZED, 'cannot use previous password!')
+        } else {
+          const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
+          await User.findOneAndUpdate({ _id: userId },
+            {
+              password: hashedPassword
+            }, { new: true })
+          await ResetPassword.findOneAndUpdate({ userId: userId, verification_token: token, isVerified: false }, { isVerified: true })
+        }
+      }
+    }
+  }
+  else {
+    throw new ApiError(httpStatus.UNAUTHORIZED, 'invalid request!')
+  }
+}
+
 export const AuthService = {
-  signup, login, authServiceLogin, verifyEmail
+  signup, login, authServiceLogin, verifyEmail, sendEmail, resetPassword
 }

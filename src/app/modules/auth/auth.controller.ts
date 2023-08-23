@@ -61,6 +61,26 @@ const verifyEmail = catchAsync(async (req: Request, res: Response) => {
   })
 });
 
+const sendEmail = catchAsync(async (req: Request, res: Response) => {
+  const { email } = req.body
+  await AuthService.sendEmail(email);
+  res.status(200).send({
+    success: true,
+    message: 'a verification message has been sent to your email!'
+  })
+});
+
+const resetPassword = catchAsync(async (req: Request, res: Response) => {
+  const { userId, token, password } = req.body
+  await AuthService.resetPassword(userId, token, password);
+  res.status(200).send({
+    success: true,
+    message: 'password reset successfully!'
+  })
+});
+
+
+
 export const AuthController = {
-  signup, login, authServiceLogin, verifyEmail
+  signup, login, authServiceLogin, verifyEmail, sendEmail, resetPassword
 }
