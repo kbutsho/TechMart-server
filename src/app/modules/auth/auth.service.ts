@@ -292,35 +292,38 @@ const sendEmail = async (email: string) => {
 }
 
 const resetPassword = async (userId: string, token: string, password: string) => {
-  const isValid = await ResetPassword.findOne({ userId: userId, verification_token: token, isVerified: false });
-  if (isValid) {
-    const isUserExist = await User.findOne({ _id: userId });
-    if (!isUserExist) {
-      throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!')
-    } else {
-      if (isUserExist.isAuthService) {
-        const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
-        await User.findOneAndUpdate({ _id: userId },
-          {
-            isAuthService: false,
-            password: hashedPassword
-          }, { new: true })
-        await ResetPassword.findOneAndUpdate({ userId: userId, verification_token: token, isVerified: false }, { isVerified: true })
+  const isExist = await ResetPassword.findOne({ userId: userId, verification_token: token });
+  if (isExist) {
+    if (!isExist.isVerified) {
+      const isUserExist = await User.findOne({ _id: userId });
+      if (!isUserExist) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, 'user not found!')
       } else {
-
-        //console.log(isUserExist.password!)
-        const isSamePassword = await bcrypt.compare(password, isUserExist.password!);
-        if (isSamePassword) {
-          throw new ApiError(httpStatus.UNAUTHORIZED, 'cannot use previous password!')
-        } else {
+        if (isUserExist.isAuthService) {
           const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
           await User.findOneAndUpdate({ _id: userId },
             {
+              isAuthService: false,
               password: hashedPassword
             }, { new: true })
           await ResetPassword.findOneAndUpdate({ userId: userId, verification_token: token, isVerified: false }, { isVerified: true })
+        } else {
+
+          const isSamePassword = await bcrypt.compare(password, isUserExist.password!);
+          if (isSamePassword) {
+            throw new ApiError(httpStatus.UNAUTHORIZED, 'cannot use previous password!')
+          } else {
+            const hashedPassword = await bcrypt.hash(password, Number(config.bcrypt_salt_rounds));
+            await User.findOneAndUpdate({ _id: userId },
+              {
+                password: hashedPassword
+              }, { new: true })
+            await ResetPassword.findOneAndUpdate({ userId: userId, verification_token: token, isVerified: false }, { isVerified: true })
+          }
         }
       }
+    } else {
+      throw new ApiError(httpStatus.UNAUTHORIZED, 'link expired!')
     }
   }
   else {
