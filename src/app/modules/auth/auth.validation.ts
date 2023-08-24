@@ -28,16 +28,7 @@ const authServiceLoginZodSchema = z.object({
       message: 'first name is required!'
     }),
     lastName: z.string().optional(),
-    role: z.string({
-      required_error: 'role is required!'
-    }).refine((value) => value.trim() !== '', {
-      message: 'role is required!'
-    }),
-    isAuthService: z.boolean({
-      required_error: 'isAuthService status is required!'
-    }).refine((value) => value === true, {
-      message: 'isAuthService status must be true!'
-    })
+    phone: z.string().optional(),
   })
 });
 

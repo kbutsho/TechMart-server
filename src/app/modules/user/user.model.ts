@@ -5,10 +5,6 @@ import { userRole, userStatus } from './user.constant';
 import config from '../../../config';
 
 const userSchema = new Schema<IUser>({
-  userId: {
-    type: Schema.Types.ObjectId,
-    required: true
-  },
   email: {
     type: String,
     required: true,
@@ -18,6 +14,36 @@ const userSchema = new Schema<IUser>({
     type: String,
     enum: userRole,
     required: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String
+  },
+  address: {
+    country: {
+      type: String
+    },
+    state: {
+      type: String
+    },
+    city: {
+      type: String
+    },
+    street: {
+      type: String
+    },
+    zipCode: {
+      type: String
+    }
+  },
+  image: {
+    type: String
+  },
+  phone: {
+    type: String
   },
   password: {
     type: String

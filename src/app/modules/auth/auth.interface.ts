@@ -4,11 +4,9 @@ export type ISignup = {
   firstName: string,
   lastName: string
   email: string;
+  phone: string;
   role: IUserRole;
   password: string;
-  status: IUserStatus;
-  isAuthService: boolean;
-  isVerified: boolean
 }
 
 export type ILogin = {
