@@ -11,7 +11,6 @@ export const emailSend = async (email: string, subject: string, verification_url
         pass: config.email_pass
       }
     })
-
     const sent = await transporter.sendMail({
       from: `Tech Mart <${config.email_user}>`,
       to: email,
@@ -22,9 +21,7 @@ export const emailSend = async (email: string, subject: string, verification_url
         `
     })
     return sent
-
   } catch (error) {
-    console.log(error)
     return error
   }
 }
