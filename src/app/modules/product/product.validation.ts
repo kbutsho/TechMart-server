@@ -31,7 +31,30 @@ const productZodSchema = z.object({
       required_error: 'features is required!'
     })
       .refine((value) => Object.keys(value).length > 0, {
-        message: 'features cannot be empty!',
+        message: 'features is required!',
+      })
+      .refine((value) => {
+        for (const key in value) {
+          if (key.trim() === '') {
+            return false;
+          }
+          if (typeof value[key] === 'string' && value[key].trim() === '') {
+            return false;
+          }
+          if (typeof value[key] === 'object') {
+            if (Object.keys(value[key]).length === 0) {
+              return false;
+            }
+            for (const subKey in value[key]) {
+              if (subKey.trim() === '' || value[key][subKey].trim() === '') {
+                return false;
+              }
+            }
+          }
+        }
+        return true;
+      }, {
+        message: 'make sure to fill in all feature fields!',
       }),
     featuredPhotos: z.array(z.any(), {
       required_error: "featured photo is required!"

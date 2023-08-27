@@ -109,7 +109,7 @@ const authServiceLogin = async (data: ISignup): Promise<ILoginUserResponse> => {
       password: null,
       isAuthService: true,
       isVerified: true,
-      status: data.role === USER_ROLE.CUSTOMER ? USER_STATUS.ACTIVE : USER_STATUS.PENDING
+      status:  USER_STATUS.ACTIVE 
     };
     const user = await User.create(newData);
     const { _id, email, role } = user;

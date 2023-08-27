@@ -1,7 +1,7 @@
 import { Model, Types } from "mongoose";
 
 export type IProductStatus = "in-stock" | "stock-out" | "limited-stock" | "upcoming" | "discontinue";
-export type IPriceUnit = "taka" | "usd" | "euro" | "rupi"
+export type IPriceUnit = "taka" | "usd" | "euro" | "rupee"
 export type IDiscountStatus = "active" | "inactive" | "end";
 export type ICouponStatus = "active" | "inactive" | "end";
 export type IDiscountType = "percentage" | "fixed" | "free-shipping"
