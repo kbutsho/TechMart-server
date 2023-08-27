@@ -10,8 +10,9 @@ import httpStatus from "http-status";
 import { isEqual, pick } from "lodash";
 import { USER_ROLE } from "../../../helpers/enums";
 
-const createProduct = async (data: IProduct): Promise<IProduct | null> => {
-  const { discountPrice, size, color, variant, reviews, rating, ...others } = data;
+const createProduct = async (sellerId: string, data: IProduct): Promise<IProduct | null> => {
+  console.log(sellerId)
+  const { discountPrice, size, color, variant, reviews, rating, seller, ...others } = data;
   const result = await Product.create({
     ...others,
     size: size ?? "unspecific",
@@ -20,9 +21,11 @@ const createProduct = async (data: IProduct): Promise<IProduct | null> => {
     discountPrice: discountPrice ?? data.price,
     reviews: reviews ?? [],
     rating: rating ?? 0.0,
-    sellCount: 0
+    sellCount: 0,
+    seller: sellerId
   })
   return result;
+
 }
 
 const getAllProduct = async (filters: IProductFilters, paginationOptions: IPaginationOptions): Promise<IGenericResponse<IProduct[]>> => {

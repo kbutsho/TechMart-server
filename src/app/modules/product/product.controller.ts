@@ -9,7 +9,9 @@ import { paginationFields } from "../../../constants/pagination";
 import { ProductService } from "./product.service";
 
 const createProduct: RequestHandler = catchAsync(async (req: Request, res: Response) => {
-  const result = await ProductService.createProduct(req.body);
+  const { _id: sellerId } = req.user!
+  console.log(sellerId)
+  const result = await ProductService.createProduct(sellerId, req.body);
   sendResponse<IProduct>(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -34,7 +36,7 @@ const getAllProduct: RequestHandler = catchAsync(async (req: Request, res: Respo
 const getSellerAllProduct: RequestHandler = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, productFilterableFields);
   const paginationOptions = pick(req.query, paginationFields);
-  const { userId: sellerId } = req.user!
+  const { _id: sellerId } = req.user!
   const result = await ProductService.getSellerAllProduct(sellerId, filters, paginationOptions);
   sendResponse<IProduct[]>(res, {
     statusCode: httpStatus.OK,

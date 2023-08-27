@@ -10,22 +10,22 @@ const productZodSchema = z.object({
     code: z.string({
       required_error: 'code is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `code cannot be empty!`,
+      message: `code is required!`,
     }),
     name: z.string({
       required_error: 'name is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `name cannot be empty!`,
+      message: `name is required!`,
     }),
     title: z.string({
       required_error: 'title is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `title cannot be empty!`,
+      message: `title is required!`,
     }),
     description: z.string({
       required_error: 'description is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `description cannot be empty!`,
+      message: `description is required!`,
     }),
     features: z.record(z.any(), {
       required_error: 'features is required!'
@@ -76,28 +76,31 @@ const productZodSchema = z.object({
     brandId: z.string({
       required_error: 'brand id is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `brand id cannot be empty!`,
+      message: `brand is required!`,
     }),
     brand: z.string({
       required_error: 'brand is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `brand cannot be empty!`,
+      message: `brand is required!`,
     }),
     categoryId: z.string({
       required_error: 'category id is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `category id cannot be empty!`,
+      message: `category is required!`,
     }),
     category: z.string({
       required_error: 'category is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `category cannot be empty!`,
+      message: `category is required!`,
     }),
     priceUnit: z.string({
       required_error: 'price unit is required!'
-    }).refine((value) => priceUnit.includes(value as IPriceUnit), {
-      message: `price unit should be ${priceUnit.join(', ').replace(/,([^,]*)$/, ' or$1')}`,
+    }).refine((value) => value.trim() !== '', {
+      message: `price unit is required!`,
     }),
+    // .refine((value) => priceUnit.includes(value as IPriceUnit), {
+    //   message: `price unit should be ${priceUnit.join(', ').replace(/,([^,]*)$/, ' or$1')}`,
+    // }),
     price: z.number({
       required_error: 'price is required!'
     }),
@@ -105,20 +108,20 @@ const productZodSchema = z.object({
       required_error: 'quantity is required!'
     }),
     status: z.string({
-      required_error: 'status is required!'
-    }).refine((value) => productStatus.includes(value as IProductStatus), {
-      message: `status should be ${productStatus.join(', ').replace(/,([^,]*)$/, ' or$1')}`,
-    }),
+      required_error: 'status is required!',
+    })
+      .refine((value) => value.trim() !== '', {
+        message: 'status is required!',
+      }),
+    // .refine((value) => productStatus.includes(value as IProductStatus), {
+    //   message: `Status should be ${productStatus.join(', ').replace(/,([^,]*)$/, ' or$1')}`,
+    // }),
     warranty: z.string({
       required_error: 'warranty is required!'
     }).refine((value) => value.trim() !== '', {
-      message: `warranty cannot be empty!`,
+      message: `warranty is required!`,
     }),
-    seller: z.string({
-      required_error: 'seller id is required!'
-    }).refine((value) => value.trim() !== '', {
-      message: `seller id cannot be empty!`,
-    }),
+
     discountPrice: z.number().optional(),
     discountCodes: z.array(
       z.object({
