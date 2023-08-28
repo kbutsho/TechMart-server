@@ -56,23 +56,37 @@ const productZodSchema = z.object({
       }, {
         message: 'make sure to fill in all feature fields!',
       }),
-    featuredPhotos: z.array(z.any(), {
-      required_error: "featured photo is required!"
-    }).refine((data) => {
-      if (data.length < 2) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "upload at least 2 photos!");
-      }
-      if (data.length > 5) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "photo should not exceed 5!");
-      }
-      if (data.some((photo) => typeof (photo) !== 'string')) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "urls should be string!");
-      }
-      if (data.some((photo) => photo.trim() === "")) {
-        throw new ApiError(httpStatus.BAD_REQUEST, "photo urls should not be empty!");
-      }
-      return true;
-    }),
+    // featuredPhotos: z.array(z.any(), {
+    //   required_error: "featured photo is required!"
+    // }).refine((data) => {
+    //   if (data.length < 2) {
+    //     throw new ApiError(httpStatus.BAD_REQUEST, "upload at least 2 photos!");
+    //   }
+    //   if (data.length > 5) {
+    //     throw new ApiError(httpStatus.BAD_REQUEST, "photo should not exceed 5!");
+    //   }
+    //   if (data.some((photo) => typeof (photo) !== 'string')) {
+    //     throw new ApiError(httpStatus.BAD_REQUEST, "urls should be string!");
+    //   }
+    //   if (data.some((photo) => photo.trim() === "")) {
+    //     throw new ApiError(httpStatus.BAD_REQUEST, "photo urls should not be empty!");
+    //   }
+    //   return true;
+    // }),
+    featuredPhotos: z
+      .array(
+        z.string({
+          required_error: 'featured photo is required!'
+        }).refine(value => value.trim() !== '', {
+          message: 'invalid photo url!'
+        })
+      )
+      .refine(value => value.length >= 2 && value.length <= 5, {
+        message: 'upload 2 to 5 featured photos!'
+      })
+      .refine(value => value.length > 0, {
+        message: 'Featured photos are required!'
+      }),
     brandId: z.string({
       required_error: 'brand id is required!'
     }).refine((value) => value.trim() !== '', {
