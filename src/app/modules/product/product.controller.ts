@@ -10,7 +10,6 @@ import { ProductService } from "./product.service";
 
 const createProduct: RequestHandler = catchAsync(async (req: Request, res: Response) => {
   const { _id: sellerId } = req.user!
-  console.log(sellerId)
   const result = await ProductService.createProduct(sellerId, req.body);
   sendResponse<IProduct>(res, {
     statusCode: httpStatus.OK,
