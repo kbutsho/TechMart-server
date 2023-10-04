@@ -72,7 +72,7 @@ const updateProduct = catchAsync(async (req: Request, res: Response) => {
 
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   const { id: productId } = req.params;
-  const { userId: userId } = req.user!;
+  const { _id: userId } = req.user!;
   const { role: userRole } = req.user!;
   const result = await ProductService.deleteProduct(productId, userId, userRole);
   sendResponse<IProduct>(res, {

@@ -11,7 +11,7 @@ router.get('/price-range', ProductController.getPriceRange)
 router.get('/seller-products', auth(USER_ROLE.SELLER), ProductController.getSellerAllProduct)
 router.get('/:id', ProductController.getSingleProduct);
 router.patch('/:id', validateRequest(ProductValidation.productZodSchema), ProductController.updateProduct);
-router.delete('/:id', ProductController.deleteProduct)
+router.delete('/:id', auth(USER_ROLE.SELLER, USER_ROLE.ADMIN), ProductController.deleteProduct)
 router.get('/', ProductController.getAllProduct)
 
 
